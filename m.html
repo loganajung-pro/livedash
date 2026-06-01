@@ -128,9 +128,67 @@
   nav.tabbar button.on{color:var(--cy-0);text-shadow:0 0 8px rgba(0,224,255,.5)}
   .deskline{text-align:center;padding:10px;font-size:10px;letter-spacing:.14em}
   .deskline a{color:var(--cy-dim);text-decoration:underline}
+
+  /* ===== login gate (matches desktop) ===== */
+  .auth-gate{position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at center,rgba(0,40,75,.96),rgba(2,8,16,.99) 75%);display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace}
+  .auth-gate.unlocked{display:none}
+  .auth-box{position:relative;background:linear-gradient(180deg, rgba(8,26,46,.96), rgba(4,17,31,.98));border:1px solid var(--cy-0);box-shadow:0 0 50px rgba(0,224,255,.35),inset 0 0 40px rgba(0,224,255,.08);padding:22px 20px;width:86vw;max-width:330px;display:flex;flex-direction:column;gap:11px;align-items:center;border-radius:3px}
+  .auth-box .alabel{font-family:"Share Tech Mono";font-size:9px;letter-spacing:.3em;color:var(--cy-2);text-transform:uppercase}
+  #authInput{background:rgba(0,20,40,.7);border:1px solid var(--cy-0);color:var(--cy-0);font-family:"Orbitron",sans-serif;font-weight:700;font-size:18px;padding:13px;width:100%;outline:none;letter-spacing:.4em;text-align:center;border-radius:6px}
+  .auth-error{font-family:"Share Tech Mono";font-size:11px;letter-spacing:.22em;color:var(--red);min-height:14px;text-align:center}
+  .auth-error.shake{animation:ashake .4s}
+  @keyframes ashake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+  /* ===== central hub home screen ===== */
+  #homeView{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:30px;text-align:center}
+  .hub-brand{font-family:"Orbitron";font-weight:900;font-size:15px;letter-spacing:.2em;color:#fff;text-shadow:0 0 14px rgba(0,224,255,.5)}
+  .hub-brand small{display:block;font-size:8.5px;letter-spacing:.3em;color:var(--cy-2);margin-top:5px;font-family:"Share Tech Mono"}
+  .hub-core{position:relative;width:250px;height:250px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .hub-core .ring{position:absolute;border-radius:50%;border:1px solid var(--line);inset:0}
+  .hub-core .ring.r2{inset:22px;border-color:rgba(0,196,255,.22)}
+  .hub-core .ring.r3{inset:46px;border-style:dashed;border-color:rgba(0,196,255,.3)}
+  .hub-core .ring.spin{animation:hspin 16s linear infinite}
+  .hub-core .ring.r3.spin{animation:hspin 24s linear infinite reverse}
+  .hub-core .ring.arc{border-color:transparent;border-top-color:var(--cy-0);box-shadow:0 0 14px rgba(0,224,255,.35);inset:8px;animation:hspin 7s linear infinite}
+  .hub-core .ring.arc2{border-color:transparent;border-bottom-color:var(--amber);inset:34px;animation:hspin 12s linear infinite reverse}
+  @keyframes hspin{to{transform:rotate(360deg)}}
+  .hub-center{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .hub-dot{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,#fff,var(--cy-0) 60%,transparent 75%);box-shadow:0 0 16px var(--cy-0),0 0 30px rgba(0,224,255,.5)}
+  .hub-title{font-family:"Orbitron";font-weight:900;font-size:13px;letter-spacing:.12em;color:#fff;line-height:1.2;text-shadow:0 0 12px rgba(0,224,255,.5)}
+  .hub-pct{font-family:"Orbitron";font-weight:900;font-size:40px;color:var(--cy-0);text-shadow:0 0 18px rgba(0,224,255,.55);line-height:1}
+  .hub-sub{font-family:"Share Tech Mono";font-size:9px;letter-spacing:.22em;color:var(--cy-dim)}
+  .hub-hint{font-family:"Share Tech Mono";font-size:10px;letter-spacing:.24em;color:var(--cy-2);text-transform:uppercase;animation:hpulse 2.4s ease-in-out infinite}
+  @keyframes hpulse{0%,100%{opacity:.4}50%{opacity:1}}
+  .back-hint{display:none;position:fixed;bottom:80px;left:0;right:0;text-align:center;font-family:"Share Tech Mono";font-size:8px;letter-spacing:.2em;color:var(--cy-dim);text-transform:uppercase;pointer-events:none;opacity:.55;z-index:20}
+  body.inapp .back-hint{display:block}
 </style>
 </head>
 <body>
+
+<!-- LOGIN GATE -->
+<div class="auth-gate" id="authGate">
+  <div class="auth-box">
+    <span class="alabel">Enter passcode</span>
+    <input type="password" id="authInput" placeholder="" autocomplete="off" autofocus inputmode="text">
+    <div class="auth-error" id="authError">&nbsp;</div>
+    <button id="authBtn" style="display:none">ENTER</button>
+  </div>
+</div>
+
+<!-- HOME SCREEN · CENTRAL HUB (no text) -->
+<div id="homeView">
+  <div class="hub-core" id="hubCore">
+    <div class="ring r1 spin"></div>
+    <div class="ring r2 spin"></div>
+    <div class="ring r3 spin"></div>
+    <div class="ring arc"></div>
+    <div class="ring arc2"></div>
+    <div class="hub-center"><span class="hub-dot"></span></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appWrap" style="display:none">
 <header>
   <div class="brand">IDENTITY PRO<small>MOBILE · STATE OF COHERENCE</small></div>
   <div id="syncMount"></div>
@@ -225,6 +283,8 @@
   <button data-tab="focus"><span class="ic">◉</span>Focus</button>
   <button data-tab="vortex"><span class="ic">✺</span>Vortex</button>
 </nav>
+<div class="back-hint">◎ double-tap empty space below to return home</div>
+</div><!-- /appWrap -->
 
 <script>
 // ============ shared data layer (same keys as desktop) ============
@@ -412,9 +472,40 @@ function showTab(name){
 }
 document.querySelectorAll('nav.tabbar button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 
-// init
+// ============ login gate (passcode, like desktop) ============
+(function wireAuth(){
+  const gate=$('authGate'), input=$('authInput'), err=$('authError'), btn=$('authBtn');
+  if(sessionStorage.getItem('idpro-auth')==='1') gate.classList.add('unlocked');
+  function unlock(){ gate.classList.add('unlocked'); sessionStorage.setItem('idpro-auth','1'); }
+  function tryAuth(){
+    if(input.value==='matrixunlocked'){ unlock(); return; }
+    err.textContent='✕ ACCESS DENIED'; err.classList.remove('shake'); void err.offsetWidth; err.classList.add('shake');
+    input.value=''; input.focus();
+  }
+  input.addEventListener('keydown',e=>{ if(e.key==='Enter') tryAuth(); });
+  if(btn) btn.onclick=tryAuth;
+})();
+
+// ============ central hub home  <->  app ============
+function renderHome(){ /* hub home is wordless — nothing to render */ }
+function enterApp(){ $('homeView').style.display='none'; $('appWrap').style.display='block'; document.body.classList.add('inapp'); showTab('today'); window.scrollTo({top:0}); }
+function goHome(){ $('appWrap').style.display='none'; document.body.classList.remove('inapp'); $('homeView').style.display='flex'; renderHome(); window.scrollTo({top:0}); }
+$('hubCore').onclick=enterApp;
+
+// double-tap an empty area in the bottom of the screen → back to the hub/home
+let lastTap=0;
+function isOpenArea(t){ return !t.closest('button,a,input,textarea,select,.stepper,.hbit,.note,nav.tabbar,.drop-head,.bank-actions,.bank-btn,#syncMount'); }
+document.addEventListener('pointerup', e=>{
+  if(!document.body.classList.contains('inapp')) return;
+  if(e.clientY < window.innerHeight*0.65){ lastTap=0; return; }   // only the bottom third of the screen
+  if(!isOpenArea(e.target)){ lastTap=0; return; }
+  const now=Date.now();
+  if(now-lastTap<350){ goHome(); lastTap=0; } else lastTap=now;
+});
+
+// init — start on the hub/home screen
 wireToday(); wireBank(); wireProto(); wireNotes(); wireFocus(); wireVortex();
-renderToday();
+renderHome();
 </script>
 
 <!-- ============================================================= -->
@@ -433,6 +524,7 @@ renderToday();
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   let user=null, pushTimer=null, applyingRemote=false, channel=null;
+  const DIRTY='__idpro_dirty'; let dirty = localStorage.getItem(DIRTY)==='1';
   const bundle=()=>{const o={};SYNC_KEYS.forEach(k=>{const v=localStorage.getItem(k);if(v!=null)o[k]=v;});return o;};
   function applyBundle(d){applyingRemote=true;let ch=false;SYNC_KEYS.forEach(k=>{if(d[k]!=null&&d[k]!==localStorage.getItem(k)){localStorage.setItem(k,d[k]);ch=true;}});applyingRemote=false;return ch;}
 
@@ -455,6 +547,8 @@ renderToday();
   }
 
   async function pull(){
+    // If this device has local changes that never reached the cloud, push them up — never let the cloud overwrite them.
+    if(dirty){ await push(true); signedIn(); return; }
     const {data,error}=await sb.from('app_state').select('data').eq('user_id',user.id).maybeSingle();
     if(error){signedIn('! '+error.message);return;}
     if(data&&data.data){const ch=applyBundle(data.data);if(ch&&!sessionStorage.getItem('idpro-pulled')){sessionStorage.setItem('idpro-pulled','1');location.reload();return;}}
@@ -463,13 +557,16 @@ renderToday();
   }
   async function push(now){
     if(!user)return; clearTimeout(pushTimer);
-    const run=async()=>{mount.innerHTML=box('⟳ …');const {error}=await sb.from('app_state').upsert({user_id:user.id,data:bundle(),updated_at:new Date().toISOString()},{onConflict:'user_id'});signedIn(error?'! ERR':null);};
-    if(now)return run(); pushTimer=setTimeout(run,1200);
+    const run=async()=>{mount.innerHTML=box('⟳ …');const {error}=await sb.from('app_state').upsert({user_id:user.id,data:bundle(),updated_at:new Date().toISOString()},{onConflict:'user_id'});if(!error){dirty=false;try{_set(DIRTY,'');}catch(e){}}signedIn(error?'! ERR':null);};
+    if(now)return run(); pushTimer=setTimeout(run,500);
   }
+  function flush(){ if(user && dirty) push(true); }
   const _set=localStorage.setItem.bind(localStorage);
-  localStorage.setItem=function(k,v){_set(k,v);if(user&&!applyingRemote&&SYNC_KEYS.indexOf(k)>-1)push();};
-  window.addEventListener('storage',e=>{if(user&&e.key&&SYNC_KEYS.indexOf(e.key)>-1)push();});
-  function subscribe(){if(channel)return;channel=sb.channel('app_state_'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'app_state',filter:'user_id=eq.'+user.id},p=>{const d=p.new&&p.new.data;if(d&&applyBundle(d))location.reload();}).subscribe();}
+  localStorage.setItem=function(k,v){_set(k,v);if(!applyingRemote&&SYNC_KEYS.indexOf(k)>-1){dirty=true;_set(DIRTY,'1');if(user)push();}};
+  window.addEventListener('storage',e=>{if(user&&e.key&&SYNC_KEYS.indexOf(e.key)>-1){dirty=true;_set(DIRTY,'1');push();}});
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden) flush(); });
+  window.addEventListener('pagehide', flush);
+  function subscribe(){if(channel)return;channel=sb.channel('app_state_'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'app_state',filter:'user_id=eq.'+user.id},p=>{const d=p.new&&p.new.data;if(d&&!dirty&&applyBundle(d))location.reload();}).subscribe();}
   sb.auth.onAuthStateChange((_e,session)=>{user=session?session.user:null;if(user){subscribe();pull();}else{if(channel){sb.removeChannel(channel);channel=null;}signedOut();}});
   sb.auth.getSession().then(({data})=>{if(!data.session&&!user)signedOut();});
 })();

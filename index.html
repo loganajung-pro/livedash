@@ -2889,6 +2889,7 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
 
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   let user=null, pushTimer=null, applyingRemote=false, channel=null;
+  const DIRTY='__idpro_dirty'; let dirty = localStorage.getItem(DIRTY)==='1';
 
   const bundle = ()=>{ const o={}; SYNC_KEYS.forEach(k=>{const v=localStorage.getItem(k); if(v!=null)o[k]=v;}); return o; };
   function applyBundle(d){ applyingRemote=true; let ch=false; SYNC_KEYS.forEach(k=>{ if(d[k]!=null && d[k]!==localStorage.getItem(k)){ localStorage.setItem(k,d[k]); ch=true; } }); applyingRemote=false; return ch; }
@@ -2925,6 +2926,8 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
   }
 
   async function pull(){
+    // If this device has local changes that never reached the cloud, push them up — never let the cloud overwrite them.
+    if(dirty){ await push(true); renderSignedIn(); return; }
     const { data, error } = await sb.from('app_state').select('data').eq('user_id',user.id).maybeSingle();
     if(error){ renderSignedIn('! '+error.message); return; }
     if(data && data.data){
@@ -2939,21 +2942,25 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
     const run = async ()=>{
       chip.innerHTML = box('SAVING...');
       const { error } = await sb.from('app_state').upsert({ user_id:user.id, data:bundle(), updated_at:new Date().toISOString() }, { onConflict:'user_id' });
+      if(!error){ dirty=false; try{ _set(DIRTY,''); }catch(e){} }
       renderSignedIn(error ? '! SAVE ERR' : null);
     };
     if(now) return run();
-    pushTimer = setTimeout(run, 1200);
+    pushTimer = setTimeout(run, 500);
   }
+  function flush(){ if(user && dirty) push(true); }
 
   const _set = localStorage.setItem.bind(localStorage);
-  localStorage.setItem = function(k,v){ _set(k,v); if(user && !applyingRemote && SYNC_KEYS.indexOf(k)>-1) push(); };
-  window.addEventListener('storage', e=>{ if(user && e.key && SYNC_KEYS.indexOf(e.key)>-1) push(); });
+  localStorage.setItem = function(k,v){ _set(k,v); if(!applyingRemote && SYNC_KEYS.indexOf(k)>-1){ dirty=true; _set(DIRTY,'1'); if(user) push(); } };
+  window.addEventListener('storage', e=>{ if(user && e.key && SYNC_KEYS.indexOf(e.key)>-1){ dirty=true; _set(DIRTY,'1'); push(); } });
+  document.addEventListener('visibilitychange', ()=>{ if(document.hidden) flush(); });
+  window.addEventListener('pagehide', flush);
 
   function subscribe(){
     if(channel) return;
     channel = sb.channel('app_state_'+user.id)
       .on('postgres_changes', { event:'*', schema:'public', table:'app_state', filter:'user_id=eq.'+user.id }, p=>{
-        const d = p.new && p.new.data; if(d && applyBundle(d)) location.reload();
+        const d = p.new && p.new.data; if(d && !dirty && applyBundle(d)) location.reload();
       }).subscribe();
   }
 
