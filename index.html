@@ -1,6 +1,15 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script>
+(function(){try{
+  var p=location.search;
+  if(p.indexOf('desktop=1')>-1){try{localStorage.setItem('forceDesktop','1');}catch(e){}}
+  var force=false;try{force=localStorage.getItem('forceDesktop')==='1';}catch(e){}
+  var phone=window.matchMedia&&window.matchMedia('(max-width:700px)').matches&&('ontouchstart' in window);
+  if(phone&&!force&&p.indexOf('desktop=1')===-1){location.replace('m.html'+location.hash);}
+}catch(e){}})();
+</script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>IDENTITY PRO // OPERATING SYSTEM</title>

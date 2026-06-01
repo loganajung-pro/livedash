@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#04111f" />
+<title>Identity Pro · Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#04111f; --bg2:#081a2e; --cy-0:#00e0ff; --cy-2:#7fe8ff; --cy-dim:#3a7d93;
+    --amber:#ffa733; --green:#5cffb1; --red:#ff6b6b;
+    --line:rgba(0,196,255,.20); --text:#cfe9f5; --text-dim:#7fa6bb;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(1100px 700px at 50% -5%, rgba(0,80,140,.30), transparent 60%), linear-gradient(180deg,#04111f,#081a2e);
+    color:var(--text);font-family:"Share Tech Mono",monospace;min-height:100vh;
+    padding-bottom:74px;-webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:"Orbitron",sans-serif;margin:0}
+  .mono{font-family:"Share Tech Mono",monospace}
+  /* header */
+  header{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:12px 16px calc(12px);background:linear-gradient(180deg,rgba(4,17,31,.96),rgba(4,17,31,.78));
+    border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+  header .brand{font-family:"Orbitron";font-weight:900;font-size:14px;letter-spacing:.16em;color:#fff;text-shadow:0 0 12px rgba(0,224,255,.5)}
+  header .brand small{display:block;font-family:"Share Tech Mono";font-weight:400;font-size:8.5px;letter-spacing:.28em;color:var(--cy-2);margin-top:2px}
+  #syncMount{display:flex;align-items:center;gap:6px;font-size:9.5px;letter-spacing:.14em;position:relative}
+  /* sections */
+  main{padding:14px 14px 8px}
+  section{display:none}
+  section.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .sec-title{font-family:"Orbitron";font-weight:700;font-size:13px;letter-spacing:.12em;color:#fff;margin:2px 0 12px;text-shadow:0 0 10px rgba(0,224,255,.35);display:flex;justify-content:space-between;align-items:baseline}
+  .sec-title .meta{font-family:"Share Tech Mono";font-size:10px;letter-spacing:.18em;color:var(--cy-2)}
+  .card{border:1px solid var(--line);background:rgba(8,26,46,.5);padding:12px 13px;margin-bottom:11px;position:relative}
+  .card .corner{position:absolute;width:10px;height:10px;border:1px solid var(--cy-0)}
+  .lbl{font-family:"Share Tech Mono";font-size:10px;letter-spacing:.2em;color:var(--cy-dim);text-transform:uppercase}
+  .big{font-family:"Orbitron";font-weight:900;font-size:22px;color:#fff;text-shadow:0 0 10px rgba(0,224,255,.4)}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .bar{height:6px;background:rgba(0,196,255,.12);position:relative;overflow:hidden;border-radius:2px;margin-top:6px}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--cy-0),var(--cy-2));box-shadow:0 0 8px var(--cy-0)}
+  .bar.green > i{background:linear-gradient(90deg,var(--green),#9affd0);box-shadow:0 0 8px var(--green)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  /* buttons */
+  button{font-family:"Share Tech Mono",monospace;cursor:pointer}
+  .btn{background:rgba(8,26,46,.7);border:1px solid var(--line);color:var(--cy-2);padding:11px 12px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;width:100%}
+  .btn:active{transform:scale(.98)}
+  .btn.green{border-color:var(--green);color:var(--green)}
+  .btn.amber{border-color:var(--amber);color:var(--amber)}
+  .stepper{display:flex;align-items:center;gap:8px}
+  .stepper button{width:42px;height:42px;border:1px solid var(--line);background:rgba(8,26,46,.8);color:var(--cy-0);font-size:20px;font-family:"Orbitron";display:flex;align-items:center;justify-content:center;border-radius:6px}
+  .stepper button.minus{color:var(--text-dim)}
+  .stepper .count{min-width:34px;text-align:center;font-family:"Orbitron";font-weight:900;font-size:18px;color:#fff}
+  /* habit chips */
+  .hbit{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line);background:rgba(8,26,46,.45);margin-bottom:8px;border-radius:6px}
+  .hbit .box{width:20px;height:20px;border:1.5px solid var(--cy-dim);border-radius:4px;flex:0 0 auto;position:relative;transition:.15s}
+  .hbit.done .box{background:var(--green);border-color:var(--green);box-shadow:0 0 10px rgba(92,255,177,.5)}
+  .hbit.done .box::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #04111f;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+  .hbit .tag{font-size:8.5px;letter-spacing:.12em;color:var(--cy-dim);border:1px solid var(--line);padding:1px 5px;border-radius:3px;flex:0 0 auto}
+  .hbit .txt{flex:1;font-size:13px;color:var(--text)}
+  .hbit.done .txt{color:#fff}
+  /* protocol row */
+  .prow{padding:10px 0;border-bottom:1px dashed var(--line)}
+  .prow:last-child{border-bottom:none}
+  .prow .pname{font-size:12.5px;color:var(--text);margin-bottom:7px}
+  .prow .pname b{color:var(--cy-2);font-weight:400}
+  /* inputs */
+  input[type=text],input[type=email],textarea{width:100%;background:rgba(0,30,55,.5);border:1px solid var(--line);color:#fff;
+    font-family:"Share Tech Mono";font-size:13px;padding:11px;outline:none;border-radius:6px}
+  input:focus,textarea:focus{border-color:var(--cy-0);box-shadow:0 0 10px rgba(0,224,255,.25)}
+  textarea{resize:vertical;min-height:90px;line-height:1.5}
+  label.fld{display:block;font-size:9.5px;letter-spacing:.18em;color:var(--cy-dim);text-transform:uppercase;margin:0 0 5px}
+  .stmt{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .stmt .n{font-family:"Orbitron";font-weight:900;font-size:11px;color:var(--cy-dim);width:22px;flex:0 0 auto;text-align:center}
+  /* note cards */
+  .note{border:1px solid var(--line);background:rgba(8,26,46,.4);padding:11px;border-radius:6px;margin-bottom:9px}
+  .note .nt{font-family:"Orbitron";font-weight:700;font-size:13px;color:#fff;margin-bottom:2px}
+  .note .nd{font-size:8.5px;letter-spacing:.14em;color:var(--cy-dim);margin-bottom:6px}
+  .note .nb{font-size:12px;line-height:1.5;white-space:pre-wrap;color:var(--text);max-height:120px;overflow:hidden}
+  .note .acts{display:flex;gap:7px;margin-top:9px}
+  .note .acts button{flex:1;background:transparent;border:1px solid var(--line);color:var(--cy-2);padding:7px;font-size:9.5px;letter-spacing:.12em;border-radius:5px}
+  .note .acts button.del{border-color:rgba(255,107,107,.4);color:var(--red)}
+  .empty{font-style:italic;color:var(--text-dim);font-size:12px;padding:14px 2px;line-height:1.55}
+  .saved{font-size:9.5px;letter-spacing:.16em;color:var(--green);min-height:12px;margin-top:4px}
+  /* bottom tab bar */
+  nav.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;background:rgba(4,17,31,.97);
+    border-top:1px solid var(--line);backdrop-filter:blur(8px);padding-bottom:env(safe-area-inset-bottom)}
+  nav.tabbar button{flex:1;background:none;border:none;color:var(--cy-dim);padding:9px 2px 10px;font-size:8.5px;letter-spacing:.1em;
+    display:flex;flex-direction:column;align-items:center;gap:3px;text-transform:uppercase}
+  nav.tabbar button .ic{font-size:17px;line-height:1}
+  nav.tabbar button.on{color:var(--cy-0);text-shadow:0 0 8px rgba(0,224,255,.5)}
+  .deskline{text-align:center;padding:10px;font-size:10px;letter-spacing:.14em}
+  .deskline a{color:var(--cy-dim);text-decoration:underline}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">IDENTITY PRO<small>MOBILE · STATE OF COHERENCE</small></div>
+  <div id="syncMount"></div>
+</header>
+
+<main>
+  <!-- TODAY -->
+  <section id="tab-today" class="active">
+    <div class="sec-title"><span>TODAY</span><span class="meta" id="todayDate"></span></div>
+    <div class="card">
+      <div class="row"><span class="lbl">Habits executed</span><span class="big" id="habitPct">0%</span></div>
+      <div class="bar green"><i id="habitBar" style="width:0%"></i></div>
+      <div class="lbl" id="habitCount" style="margin-top:6px">0 / 0</div>
+    </div>
+    <div id="habitList"></div>
+    <div class="sec-title" style="margin-top:18px"><span>GLANCE</span></div>
+    <div class="grid2">
+      <div class="card"><span class="lbl">Income · /mo</span><div class="big" id="incTot">$0</div><div class="bar"><i id="incBar" style="width:0%"></i></div><div class="lbl" style="margin-top:5px">target $110K</div></div>
+      <div class="card"><span class="lbl">Bank balance</span><div class="big" id="bankBal">$0</div><div class="lbl" style="margin-top:5px">open to-dos</div><div class="big" style="font-size:18px" id="todoOpen">0</div></div>
+    </div>
+  </section>
+
+  <!-- PROTOCOLS -->
+  <section id="tab-protocols">
+    <div class="sec-title"><span>PROTOCOL METRIC</span><span class="meta">target 30 / mo</span></div>
+    <div class="card" id="protoList"></div>
+    <button class="btn amber" id="protoReset">▸ MONTHLY RESET</button>
+  </section>
+
+  <!-- NOTES -->
+  <section id="tab-notes">
+    <div class="sec-title"><span>COHERENCE NOTES</span><span class="meta" id="noteCount">0</span></div>
+    <div class="card">
+      <input type="text" id="noteTitle" placeholder="Title — name the knowing">
+      <textarea id="noteBody" placeholder="Written from coherence — already true…" style="margin-top:8px"></textarea>
+      <div class="row" style="margin-top:8px;gap:8px">
+        <button class="btn" id="noteCancel" style="display:none">✕ Cancel</button>
+        <button class="btn green" id="noteSave">＋ Save note</button>
+      </div>
+      <div class="saved" id="noteSaved"></div>
+    </div>
+    <div id="noteList"></div>
+  </section>
+
+  <!-- FOCUS WHEEL -->
+  <section id="tab-focus">
+    <div class="sec-title"><span>FOCUS WHEEL</span><span class="meta">close the gap</span></div>
+    <div class="card">
+      <label class="fld">The desire · inner circle</label>
+      <input type="text" id="fwTitle" placeholder="e.g. $110K / month · already true">
+      <label class="fld" style="margin-top:12px">Supporting statements · 8–12</label>
+      <div id="fwStmts"></div>
+      <button class="btn green" id="fwSave" style="margin-top:6px">▸ Save wheel</button>
+      <div class="saved" id="fwSaved"></div>
+    </div>
+  </section>
+
+  <!-- VORTEX -->
+  <section id="tab-vortex">
+    <div class="sec-title"><span>VORTEX</span><span class="meta">anchor into source</span></div>
+    <div class="card">
+      <div class="lbl" style="line-height:1.5;text-transform:none;color:var(--cy-1);margin-bottom:10px">Climb the ladder slowly. Land on the rung that feels true now, then stretch.</div>
+      <div id="vxStmts"></div>
+      <button class="btn green" id="vxSave" style="margin-top:6px">▸ Save ladder</button>
+      <div class="saved" id="vxSaved"></div>
+    </div>
+  </section>
+
+  <div class="deskline"><a href="index.html?desktop=1">↔ Switch to desktop view</a></div>
+</main>
+
+<nav class="tabbar">
+  <button data-tab="today" class="on"><span class="ic">◎</span>Today</button>
+  <button data-tab="protocols"><span class="ic">▤</span>Protocol</button>
+  <button data-tab="notes"><span class="ic">✎</span>Notes</button>
+  <button data-tab="focus"><span class="ic">◉</span>Focus</button>
+  <button data-tab="vortex"><span class="ic">✺</span>Vortex</button>
+</nav>
+
+<script>
+// ============ shared data layer (same keys as desktop) ============
+const MAIN='identity-pro-os-v1', TRACK='idpro-tracking', NOTES='coherenceNotes_v1';
+const loadMain=()=>{try{return JSON.parse(localStorage.getItem(MAIN))||{}}catch(e){return{}}};
+const saveMain=s=>localStorage.setItem(MAIN,JSON.stringify(s));
+const loadTrack=()=>{try{return JSON.parse(localStorage.getItem(TRACK))||{}}catch(e){return{}}};
+const saveTrack=s=>localStorage.setItem(TRACK,JSON.stringify(s));
+const loadNotes=()=>{try{return JSON.parse(localStorage.getItem(NOTES))||[]}catch(e){return[]}};
+const saveNotes=a=>localStorage.setItem(NOTES,JSON.stringify(a));
+const todayKey=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const $=id=>document.getElementById(id);
+
+const HABITS=[
+  {id:'h1',layer:'L1',text:'AM Anchor'},{id:'h2',layer:'L2',text:'Coherent Focus'},
+  {id:'h3',layer:'L3',text:'Focus Wheel'},{id:'h4',layer:'L3',text:'Matrix Protocol'},
+  {id:'h5',layer:'L3',text:'Market Journal'},{id:'h6',layer:'L2',text:'Midday State Check'},
+  {id:'h11',layer:'L2',text:'Gym Time'},{id:'h7',layer:'L3',text:'Build Block 90m'},
+  {id:'h8',layer:'L1',text:'Shadow Check'},{id:'h9',layer:'L4',text:'PM Visual Embodiment'},
+  {id:'h10',layer:'L2',text:'PM Anchor'}
+];
+const PROTO=[
+  ['premarket','Pre-Market Review'],['matrix','Matrix Protocol'],['journal','Trade Journal'],
+  ['coherence','Coherence Work'],['digital','Digital Empire Block'],['regulation','Emotional Regulation'],
+  ['physical','Physical Training'],['visualization','Evening Visualization'],['integration','Daily Integration']
+];
+const PROTO_TARGET=30;
+const INC_TARGETS={prop:40000,live:20000,digital:50000};
+
+// ============ TODAY ============
+function renderToday(){
+  $('todayDate').textContent=todayKey();
+  const s=loadMain(); const tk=todayKey();
+  s.habits=s.habits||{}; s.habits[tk]=s.habits[tk]||{};
+  const done=HABITS.filter(h=>s.habits[tk][h.id]).length;
+  const pct=Math.round(done/HABITS.length*100);
+  $('habitPct').textContent=pct+'%'; $('habitBar').style.width=pct+'%';
+  $('habitCount').textContent=done+' / '+HABITS.length+' executed';
+  $('habitList').innerHTML=HABITS.map(h=>
+    '<div class="hbit'+(s.habits[tk][h.id]?' done':'')+'" data-h="'+h.id+'"><div class="box"></div><span class="tag">'+h.layer+'</span><span class="txt">'+esc(h.text)+'</span></div>'
+  ).join('');
+  $('habitList').querySelectorAll('[data-h]').forEach(el=>el.onclick=()=>{
+    const st=loadMain(); st.habits=st.habits||{}; st.habits[tk]=st.habits[tk]||{};
+    const id=el.dataset.h; st.habits[tk][id]=!st.habits[tk][id]; saveMain(st); renderToday();
+  });
+  // glance
+  const inc=s.income||{}; let tot=0; Object.keys(INC_TARGETS).forEach(k=>tot+=(+inc[k]||0));
+  $('incTot').textContent='$'+tot.toLocaleString();
+  $('incBar').style.width=Math.min(100,tot/110000*100)+'%';
+  const bank=(s.bank&&typeof s.bank.balance==='number')?s.bank.balance:0;
+  $('bankBal').textContent='$'+bank.toLocaleString();
+  const todos=Array.isArray(s.todos)?s.todos:[];
+  $('todoOpen').textContent=todos.filter(t=>!t.done).length;
+}
+
+// ============ PROTOCOLS ============
+function renderProto(){
+  const t=loadTrack(); t.protocols=t.protocols||{};
+  $('protoList').innerHTML=PROTO.map(([k,label])=>{
+    const c=t.protocols[k]||0; const pct=Math.min(100,c/PROTO_TARGET*100);
+    return '<div class="prow"><div class="pname">'+esc(label)+' <b>· '+c+'/'+PROTO_TARGET+'</b></div>'
+      +'<div class="row"><div class="bar '+(c>=PROTO_TARGET?'green':'')+'" style="flex:1"><i style="width:'+pct+'%"></i></div>'
+      +'<div class="stepper"><button class="minus" data-pk="'+k+'" data-d="-1">−</button><span class="count">'+c+'</span><button data-pk="'+k+'" data-d="1">+</button></div></div></div>';
+  }).join('');
+  $('protoList').querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{
+    const tr=loadTrack(); tr.protocols=tr.protocols||{};
+    const k=b.dataset.pk; tr.protocols[k]=Math.max(0,(tr.protocols[k]||0)+(+b.dataset.d)); saveTrack(tr); renderProto();
+  });
+}
+function wireProto(){ $('protoReset').onclick=()=>{ if(!confirm('Reset all protocol counts to 0?'))return; const tr=loadTrack(); tr.protocols={}; PROTO.forEach(([k])=>tr.protocols[k]=0); saveTrack(tr); renderProto(); }; }
+
+// ============ NOTES ============
+let editId=null;
+function fmtDate(ts){const d=new Date(ts);return d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})+' · '+d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});}
+function slug(s){return (s||'note').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,48)||'note';}
+function noteId(n){return n.id||('ts'+n.ts);}
+function renderNotes(){
+  const arr=loadNotes(); $('noteCount').textContent=arr.length;
+  $('noteList').innerHTML=arr.length?arr.map((n,i)=>
+    '<div class="note"><div class="nt">'+esc(n.title||'Untitled')+'</div><div class="nd">'+fmtDate(n.ts)+'</div>'
+    +'<div class="nb">'+esc(n.body)+'</div><div class="acts"><button data-edit="'+i+'">✎ Edit</button><button data-dl="'+i+'">↓ .md</button><button class="del" data-del="'+i+'">Delete</button></div></div>'
+  ).join(''):'<div class="empty">No notes yet. The first idea from coherence will appear here — already on its way.</div>';
+  $('noteList').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{const a=loadNotes();const n=a[+b.dataset.edit];if(!n)return;editId=noteId(n);$('noteTitle').value=n.title||'';$('noteBody').value=n.body||'';$('noteSave').textContent='✓ Update note';$('noteCancel').style.display='';window.scrollTo({top:0,behavior:'smooth'});});
+  $('noteList').querySelectorAll('[data-dl]').forEach(b=>b.onclick=()=>{const a=loadNotes();const n=a[+b.dataset.dl];if(n)dlNote(n);});
+  $('noteList').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(!confirm('Delete this note?'))return;const a=loadNotes();const rm=a.splice(+b.dataset.del,1)[0];if(rm&&noteId(rm)===editId)clearNote();saveNotes(a);renderNotes();});
+}
+function dlNote(n){const md='# '+(n.title||'Untitled Note')+'\n\n> Coherence note · '+fmtDate(n.ts)+'\n\n'+(n.body||'')+'\n';const fn=(new Date(n.ts).toISOString().slice(0,10))+'-'+slug(n.title)+'.md';const b=new Blob([md],{type:'text/markdown'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u);}
+function clearNote(){editId=null;$('noteTitle').value='';$('noteBody').value='';$('noteSave').textContent='＋ Save note';$('noteCancel').style.display='none';}
+function wireNotes(){
+  $('noteCancel').onclick=()=>{clearNote();};
+  $('noteSave').onclick=()=>{
+    const title=$('noteTitle').value.trim(), body=$('noteBody').value.trim();
+    if(!title&&!body){$('noteSaved').textContent='Nothing to save';return;}
+    const arr=loadNotes(); let edited=false;
+    if(editId!=null){const idx=arr.findIndex(n=>noteId(n)===editId);if(idx>-1){edited=true;const n=arr[idx];n.title=title||'Untitled Note';n.body=body;n.edited=Date.now();if(!n.id)n.id=editId;arr.splice(idx,1);arr.unshift(n);}}
+    if(!edited){arr.unshift({id:'n'+Date.now()+Math.random().toString(36).slice(2,6),title:title||'Untitled Note',body:body,ts:Date.now()});}
+    saveNotes(arr); clearNote(); renderNotes();
+    $('noteSaved').textContent=edited?'✓ Updated':'✓ Saved'; setTimeout(()=>$('noteSaved').textContent='',2400);
+  };
+}
+
+// ============ FOCUS WHEEL ============
+function renderFocus(){
+  const s=loadMain(); s.focusWheel=s.focusWheel||{title:'',statements:Array(12).fill('')};
+  const fw=s.focusWheel; if(!Array.isArray(fw.statements))fw.statements=Array(12).fill('');
+  while(fw.statements.length<12)fw.statements.push('');
+  $('fwTitle').value=fw.title||'';
+  $('fwStmts').innerHTML=Array.from({length:12}).map((_,i)=>
+    '<div class="stmt"><span class="n">'+String(i+1).padStart(2,'0')+'</span><input type="text" data-fw="'+i+'" placeholder="Believable + slightly relieving" value="'+esc(fw.statements[i]||'')+'"></div>'
+  ).join('');
+}
+function wireFocus(){
+  $('fwSave').onclick=()=>{
+    const s=loadMain(); s.focusWheel=s.focusWheel||{title:'',statements:Array(12).fill('')};
+    s.focusWheel.title=$('fwTitle').value;
+    s.focusWheel.statements=Array.from(document.querySelectorAll('#fwStmts [data-fw]')).map(i=>i.value);
+    saveMain(s); $('fwSaved').textContent='✓ Wheel saved'; setTimeout(()=>$('fwSaved').textContent='',2400);
+  };
+}
+
+// ============ VORTEX ============
+function renderVortex(){
+  const s=loadMain(); s.vortex=s.vortex||{current:{statements:Array(12).fill('')},archive:[]};
+  if(!s.vortex.current||!Array.isArray(s.vortex.current.statements))s.vortex.current={statements:Array(12).fill(''),started:new Date().toISOString()};
+  while(s.vortex.current.statements.length<12)s.vortex.current.statements.push('');
+  const st=s.vortex.current.statements;
+  $('vxStmts').innerHTML=Array.from({length:12}).map((_,i)=>
+    '<div class="stmt"><span class="n">'+String(i+1).padStart(2,'0')+'</span><input type="text" data-vx="'+i+'" placeholder="Reach for the next better-feeling thought" value="'+esc(st[i]||'')+'"></div>'
+  ).join('');
+}
+function wireVortex(){
+  $('vxSave').onclick=()=>{
+    const s=loadMain(); s.vortex=s.vortex||{current:{},archive:[]};
+    if(!s.vortex.current)s.vortex.current={started:new Date().toISOString()};
+    s.vortex.current.statements=Array.from(document.querySelectorAll('#vxStmts [data-vx]')).map(i=>i.value);
+    saveMain(s); $('vxSaved').textContent='✓ Ladder saved'; setTimeout(()=>$('vxSaved').textContent='',2400);
+  };
+}
+
+// ============ tabs ============
+const RENDER={today:renderToday,protocols:renderProto,notes:renderNotes,focus:renderFocus,vortex:renderVortex};
+function showTab(name){
+  document.querySelectorAll('section').forEach(s=>s.classList.toggle('active',s.id==='tab-'+name));
+  document.querySelectorAll('nav.tabbar button').forEach(b=>b.classList.toggle('on',b.dataset.tab===name));
+  (RENDER[name]||(()=>{}))();
+  window.scrollTo({top:0});
+}
+document.querySelectorAll('nav.tabbar button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+
+// init
+wireProto(); wireNotes(); wireFocus(); wireVortex();
+renderToday();
+</script>
+
+<!-- ============================================================= -->
+<!--  CLOUD SYNC · same Supabase project + keys as the desktop site -->
+<!-- ============================================================= -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function cloudSync(){
+  const SUPABASE_URL      = 'https://quxwkafxzziyqlidovtm.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1eHdrYWZ4enppeXFsaWRvdnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyODg0NDksImV4cCI6MjA5NTg2NDQ0OX0.fpBDApkRvu0ISQgkVbIYchk5yImVgwpwlwJgDABOKIY';
+  const SYNC_KEYS = ['identity-pro-os-v1','idpro-tracking','coherenceNotes_v1','trading_brain_v1','idpro-beliefs','idpro-phase-notes'];
+
+  const mount = document.getElementById('syncMount') || document.body;
+  const box=(t,b,c)=>'<div style="border:1px solid '+(b||'#0cf')+';color:'+(c||'#7fe8ff')+';padding:6px 9px;border-radius:5px;white-space:nowrap">'+t+'</div>';
+  if(typeof supabase==='undefined'){ mount.innerHTML=box('◌ OFFLINE','#556','#9bb'); return; }
+
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  let user=null, pushTimer=null, applyingRemote=false, channel=null;
+  const bundle=()=>{const o={};SYNC_KEYS.forEach(k=>{const v=localStorage.getItem(k);if(v!=null)o[k]=v;});return o;};
+  function applyBundle(d){applyingRemote=true;let ch=false;SYNC_KEYS.forEach(k=>{if(d[k]!=null&&d[k]!==localStorage.getItem(k)){localStorage.setItem(k,d[k]);ch=true;}});applyingRemote=false;return ch;}
+
+  function signedIn(note){
+    const who=(user&&user.email)?user.email.split('@')[0]:'on';
+    mount.innerHTML=box((note||'✓ SYNC')+' · '+who,'#5cffb1','#5cffb1')+'<div id="sOut" style="border:1px solid #335;color:#9bb;padding:6px 8px;border-radius:5px">OUT</div>';
+    const o=$('sOut'); if(o)o.onclick=async()=>{await sb.auth.signOut();location.reload();};
+  }
+  function signedOut(){ mount.innerHTML='<div id="sIn" style="border:1px solid #0cf;color:#7fe8ff;padding:6px 9px;border-radius:5px">◌ SIGN IN</div>'; $('sIn').onclick=login; }
+  function login(){
+    mount.innerHTML='<div style="position:absolute;top:calc(100% + 8px);right:0;background:rgba(8,26,46,.98);border:1px solid #0cf;border-radius:7px;padding:10px;display:flex;flex-direction:column;gap:7px;width:210px;z-index:50;box-shadow:0 0 20px rgba(0,224,255,.3)">'
+      +'<div style="color:#7fe8ff;letter-spacing:.16em;font-size:9px">SIGN IN TO SYNC</div>'
+      +'<input id="sEmail" type="email" placeholder="you@email.com" style="font-size:12px;padding:8px">'
+      +'<button id="sSend" style="background:transparent;border:1px solid #5cffb1;color:#5cffb1;padding:8px;border-radius:5px;font-size:9.5px;letter-spacing:.14em">EMAIL ME A LINK</button>'
+      +'<div id="sMsg" style="color:#9bb;font-size:8.5px;min-height:10px"></div></div>'
+      +'<div id="sIn2" style="border:1px solid #0cf;color:#7fe8ff;padding:6px 9px;border-radius:5px">◌ SIGN IN</div>';
+    $('sIn2').onclick=signedOut;
+    $('sSend').onclick=async()=>{const em=$('sEmail').value.trim();const m=$('sMsg');if(!em){m.textContent='Enter your email';return;}m.textContent='Sending…';const {error}=await sb.auth.signInWithOtp({email:em,options:{emailRedirectTo:location.href.split('#')[0]}});m.textContent=error?('! '+error.message):'Link sent — check email';};
+    setTimeout(()=>{const e=$('sEmail');if(e)e.focus();},40);
+  }
+
+  async function pull(){
+    const {data,error}=await sb.from('app_state').select('data').eq('user_id',user.id).maybeSingle();
+    if(error){signedIn('! '+error.message);return;}
+    if(data&&data.data){const ch=applyBundle(data.data);if(ch&&!sessionStorage.getItem('idpro-pulled')){sessionStorage.setItem('idpro-pulled','1');location.reload();return;}}
+    else{await push(true);}
+    signedIn();
+  }
+  async function push(now){
+    if(!user)return; clearTimeout(pushTimer);
+    const run=async()=>{mount.innerHTML=box('⟳ …');const {error}=await sb.from('app_state').upsert({user_id:user.id,data:bundle(),updated_at:new Date().toISOString()},{onConflict:'user_id'});signedIn(error?'! ERR':null);};
+    if(now)return run(); pushTimer=setTimeout(run,1200);
+  }
+  const _set=localStorage.setItem.bind(localStorage);
+  localStorage.setItem=function(k,v){_set(k,v);if(user&&!applyingRemote&&SYNC_KEYS.indexOf(k)>-1)push();};
+  window.addEventListener('storage',e=>{if(user&&e.key&&SYNC_KEYS.indexOf(e.key)>-1)push();});
+  function subscribe(){if(channel)return;channel=sb.channel('app_state_'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'app_state',filter:'user_id=eq.'+user.id},p=>{const d=p.new&&p.new.data;if(d&&applyBundle(d))location.reload();}).subscribe();}
+  sb.auth.onAuthStateChange((_e,session)=>{user=session?session.user:null;if(user){subscribe();pull();}else{if(channel){sb.removeChannel(channel);channel=null;}signedOut();}});
+  sb.auth.getSession().then(({data})=>{if(!data.session&&!user)signedOut();});
+})();
+</script>
+</body>
+</html>
