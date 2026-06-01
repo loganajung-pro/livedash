@@ -7,25 +7,24 @@
 <title>Identity Pro · Mobile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#04111f; --bg2:#081a2e; --cy-0:#00e0ff; --cy-2:#7fe8ff; --cy-dim:#3a7d93;
-    --amber:#ffa733; --green:#5cffb1; --red:#ff6b6b;
-    --line:rgba(0,196,255,.20); --text:#cfe9f5; --text-dim:#7fa6bb;
+    --bg:#04111f; --bg2:#081a2e; --cy-0:#00e0ff; --cy-1:#9fd9ec; --cy-2:#7fe8ff; --cy-dim:#3a7d93;
+    --amber:#ffa733; --amber-2:#ffce8a; --green:#5cffb1; --red:#ff6b6b;
+    --line:rgba(0,196,255,.20); --line-dim:rgba(0,196,255,.10); --text:#cfe9f5; --text-dim:#7fa6bb;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
   body{
     background:radial-gradient(1100px 700px at 50% -5%, rgba(0,80,140,.30), transparent 60%), linear-gradient(180deg,#04111f,#081a2e);
-    color:var(--text);font-family:"Share Tech Mono",monospace;min-height:100vh;
+    color:var(--text);font-family:"JetBrains Mono",ui-monospace,monospace;min-height:100vh;
     padding-bottom:74px;-webkit-font-smoothing:antialiased;
   }
   h1,h2,h3{font-family:"Orbitron",sans-serif;margin:0}
-  .mono{font-family:"Share Tech Mono",monospace}
   /* header */
   header{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:10px;
-    padding:12px 16px calc(12px);background:linear-gradient(180deg,rgba(4,17,31,.96),rgba(4,17,31,.78));
+    padding:12px 16px;background:linear-gradient(180deg,rgba(4,17,31,.96),rgba(4,17,31,.78));
     border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
   header .brand{font-family:"Orbitron";font-weight:900;font-size:14px;letter-spacing:.16em;color:#fff;text-shadow:0 0 12px rgba(0,224,255,.5)}
   header .brand small{display:block;font-family:"Share Tech Mono";font-weight:400;font-size:8.5px;letter-spacing:.28em;color:var(--cy-2);margin-top:2px}
@@ -38,24 +37,27 @@
   .sec-title{font-family:"Orbitron";font-weight:700;font-size:13px;letter-spacing:.12em;color:#fff;margin:2px 0 12px;text-shadow:0 0 10px rgba(0,224,255,.35);display:flex;justify-content:space-between;align-items:baseline}
   .sec-title .meta{font-family:"Share Tech Mono";font-size:10px;letter-spacing:.18em;color:var(--cy-2)}
   .card{border:1px solid var(--line);background:rgba(8,26,46,.5);padding:12px 13px;margin-bottom:11px;position:relative}
-  .card .corner{position:absolute;width:10px;height:10px;border:1px solid var(--cy-0)}
   .lbl{font-family:"Share Tech Mono";font-size:10px;letter-spacing:.2em;color:var(--cy-dim);text-transform:uppercase}
   .big{font-family:"Orbitron";font-weight:900;font-size:22px;color:#fff;text-shadow:0 0 10px rgba(0,224,255,.4)}
   .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
   .bar{height:6px;background:rgba(0,196,255,.12);position:relative;overflow:hidden;border-radius:2px;margin-top:6px}
   .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--cy-0),var(--cy-2));box-shadow:0 0 8px var(--cy-0)}
   .bar.green > i{background:linear-gradient(90deg,var(--green),#9affd0);box-shadow:0 0 8px var(--green)}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
   /* buttons */
   button{font-family:"Share Tech Mono",monospace;cursor:pointer}
   .btn{background:rgba(8,26,46,.7);border:1px solid var(--line);color:var(--cy-2);padding:11px 12px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;width:100%}
   .btn:active{transform:scale(.98)}
   .btn.green{border-color:var(--green);color:var(--green)}
   .btn.amber{border-color:var(--amber);color:var(--amber)}
-  .stepper{display:flex;align-items:center;gap:8px}
-  .stepper button{width:42px;height:42px;border:1px solid var(--line);background:rgba(8,26,46,.8);color:var(--cy-0);font-size:20px;font-family:"Orbitron";display:flex;align-items:center;justify-content:center;border-radius:6px}
-  .stepper button.minus{color:var(--text-dim)}
-  .stepper .count{min-width:34px;text-align:center;font-family:"Orbitron";font-weight:900;font-size:18px;color:#fff}
+
+  /* ===== habits dropdown ===== */
+  .drop.card{padding:0;overflow:hidden}
+  .drop-head{width:100%;background:none;border:none;color:inherit;display:flex;align-items:center;gap:12px;padding:13px 13px;cursor:pointer}
+  .drop-head .summary{flex:1;min-width:0}
+  .drop .chev{font-size:13px;color:var(--cy-0);transition:transform .28s ease;flex:0 0 auto}
+  .drop.open .chev{transform:rotate(180deg)}
+  .drop-body{max-height:0;overflow:hidden;transition:max-height .32s ease;padding:0 13px}
+  .drop.open .drop-body{max-height:1400px;padding:2px 13px 13px}
   /* habit chips */
   .hbit{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line);background:rgba(8,26,46,.45);margin-bottom:8px;border-radius:6px}
   .hbit .box{width:20px;height:20px;border:1.5px solid var(--cy-dim);border-radius:4px;flex:0 0 auto;position:relative;transition:.15s}
@@ -64,20 +66,49 @@
   .hbit .tag{font-size:8.5px;letter-spacing:.12em;color:var(--cy-dim);border:1px solid var(--line);padding:1px 5px;border-radius:3px;flex:0 0 auto}
   .hbit .txt{flex:1;font-size:13px;color:var(--text)}
   .hbit.done .txt{color:#fff}
-  /* protocol row */
-  .prow{padding:10px 0;border-bottom:1px dashed var(--line)}
+
+  /* ===== phase 1 identity card ===== */
+  .id-card{border:1px solid var(--amber);background:linear-gradient(180deg, rgba(255,167,51,.07), rgba(255,167,51,.02));padding:13px;font-family:"Share Tech Mono";font-size:12.5px;letter-spacing:.02em;color:var(--amber);line-height:1.55;margin-bottom:11px;border-radius:2px}
+  .id-card .label{font-size:9px;letter-spacing:.3em;color:var(--amber-2);margin-bottom:7px;display:block}
+
+  /* ===== real bank account (matches desktop) ===== */
+  .bank-section{border:1px solid var(--green);background:linear-gradient(180deg, rgba(92,255,177,.04), transparent);padding:0;margin:0 0 11px;overflow:hidden;position:relative;border-radius:2px}
+  .bank-section::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0%, rgba(92,255,177,.1), transparent 60%);pointer-events:none}
+  .bank-head{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid var(--line);font-family:"Share Tech Mono";font-size:10.5px;letter-spacing:.24em;color:var(--green);background:linear-gradient(90deg, rgba(92,255,177,.08), transparent);text-transform:uppercase;text-shadow:0 0 6px rgba(92,255,177,.35);position:relative;z-index:1}
+  .bank-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:blink 2.2s ease-in-out infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+  .bank-balance{display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px 12px 14px;position:relative;z-index:1}
+  .bank-cur{font-family:"Orbitron";font-weight:900;font-size:32px;color:var(--green);text-shadow:0 0 14px rgba(92,255,177,.55),0 0 32px rgba(92,255,177,.3);letter-spacing:.02em;line-height:1}
+  .bank-sub{font-family:"Share Tech Mono";font-size:9px;letter-spacing:.32em;color:var(--cy-dim);text-transform:uppercase}
+  .bank-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 12px 12px;position:relative;z-index:1}
+  .bank-btn{background:transparent;border:1px solid var(--green);color:var(--green);padding:11px 8px;font-family:"Share Tech Mono";font-size:10px;letter-spacing:.18em;text-transform:uppercase}
+  .bank-btn.add{border-color:var(--amber);color:var(--amber)}
+  .bank-log{max-height:200px;overflow-y:auto;border-top:1px dashed var(--line-dim);padding:6px 12px 8px;position:relative;z-index:1}
+  .bank-log-entry{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line-dim);font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--text)}
+  .bank-log-entry:last-child{border-bottom:none}
+  .bank-log-entry .bl-ts{font-family:"Share Tech Mono";font-size:9px;letter-spacing:.14em;color:var(--cy-dim);text-transform:uppercase;flex:1}
+  .bank-log-entry .bl-amt{font-family:"Orbitron";font-weight:700;font-size:11px;color:var(--green);text-shadow:0 0 6px rgba(92,255,177,.35)}
+  .bank-log-entry .bl-amt.neg{color:var(--red);text-shadow:0 0 6px rgba(255,70,97,.35)}
+  .bank-log-empty{font-family:"Share Tech Mono";font-size:9.5px;letter-spacing:.18em;color:var(--text-dim);text-transform:uppercase;text-align:center;padding:10px 0}
+
+  /* ===== protocol rows (slim) ===== */
+  .prow{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px dashed var(--line)}
   .prow:last-child{border-bottom:none}
-  .prow .pname{font-size:12.5px;color:var(--text);margin-bottom:7px}
+  .prow .pinfo{flex:1;min-width:0}
+  .prow .pname{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .prow .pname b{color:var(--cy-2);font-weight:400}
-  /* inputs */
-  input[type=text],input[type=email],textarea{width:100%;background:rgba(0,30,55,.5);border:1px solid var(--line);color:#fff;
-    font-family:"Share Tech Mono";font-size:13px;padding:11px;outline:none;border-radius:6px}
+  .stepper{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+  .stepper button{width:34px;height:34px;border:1px solid var(--line);background:rgba(8,26,46,.8);color:var(--cy-0);font-size:18px;font-family:"Orbitron";display:flex;align-items:center;justify-content:center;border-radius:6px}
+  .stepper button.minus{color:var(--text-dim)}
+  .stepper .count{min-width:26px;text-align:center;font-family:"Orbitron";font-weight:900;font-size:15px;color:#fff}
+
+  /* inputs / notes / statements */
+  input[type=text],input[type=email],textarea{width:100%;background:rgba(0,30,55,.5);border:1px solid var(--line);color:#fff;font-family:"Share Tech Mono";font-size:13px;padding:11px;outline:none;border-radius:6px}
   input:focus,textarea:focus{border-color:var(--cy-0);box-shadow:0 0 10px rgba(0,224,255,.25)}
   textarea{resize:vertical;min-height:90px;line-height:1.5}
   label.fld{display:block;font-size:9.5px;letter-spacing:.18em;color:var(--cy-dim);text-transform:uppercase;margin:0 0 5px}
   .stmt{display:flex;gap:8px;align-items:center;margin-bottom:8px}
   .stmt .n{font-family:"Orbitron";font-weight:900;font-size:11px;color:var(--cy-dim);width:22px;flex:0 0 auto;text-align:center}
-  /* note cards */
   .note{border:1px solid var(--line);background:rgba(8,26,46,.4);padding:11px;border-radius:6px;margin-bottom:9px}
   .note .nt{font-family:"Orbitron";font-weight:700;font-size:13px;color:#fff;margin-bottom:2px}
   .note .nd{font-size:8.5px;letter-spacing:.14em;color:var(--cy-dim);margin-bottom:6px}
@@ -87,6 +118,7 @@
   .note .acts button.del{border-color:rgba(255,107,107,.4);color:var(--red)}
   .empty{font-style:italic;color:var(--text-dim);font-size:12px;padding:14px 2px;line-height:1.55}
   .saved{font-size:9.5px;letter-spacing:.16em;color:var(--green);min-height:12px;margin-top:4px}
+
   /* bottom tab bar */
   nav.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;background:rgba(4,17,31,.97);
     border-top:1px solid var(--line);backdrop-filter:blur(8px);padding-bottom:env(safe-area-inset-bottom)}
@@ -108,16 +140,32 @@
   <!-- TODAY -->
   <section id="tab-today" class="active">
     <div class="sec-title"><span>TODAY</span><span class="meta" id="todayDate"></span></div>
-    <div class="card">
-      <div class="row"><span class="lbl">Habits executed</span><span class="big" id="habitPct">0%</span></div>
-      <div class="bar green"><i id="habitBar" style="width:0%"></i></div>
-      <div class="lbl" id="habitCount" style="margin-top:6px">0 / 0</div>
+
+    <!-- habits executed → tap to drop down -->
+    <div class="drop card" id="habitDrop">
+      <button class="drop-head" id="habitDropHead">
+        <div class="summary">
+          <div class="row"><span class="lbl">Habits executed</span><span class="big" id="habitPct">0%</span></div>
+          <div class="bar green"><i id="habitBar" style="width:0%"></i></div>
+          <div class="lbl" id="habitCount" style="margin-top:6px">0 / 0</div>
+        </div>
+        <span class="chev" id="habitChev">▾</span>
+      </button>
+      <div class="drop-body" id="habitList"></div>
     </div>
-    <div id="habitList"></div>
-    <div class="sec-title" style="margin-top:18px"><span>GLANCE</span></div>
-    <div class="grid2">
-      <div class="card"><span class="lbl">Income · /mo</span><div class="big" id="incTot">$0</div><div class="bar"><i id="incBar" style="width:0%"></i></div><div class="lbl" style="margin-top:5px">target $110K</div></div>
-      <div class="card"><span class="lbl">Bank balance</span><div class="big" id="bankBal">$0</div><div class="lbl" style="margin-top:5px">open to-dos</div><div class="big" style="font-size:18px" id="todoOpen">0</div></div>
+
+    <!-- phase 1 identity -->
+    <div class="id-card"><span class="label">PHASE 1 IDENTITY</span>I am a consistently funded trader. My edge is proven. I follow my rules without negotiation.</div>
+
+    <!-- real bank account -->
+    <div class="bank-section">
+      <div class="bank-head"><span>REAL BANK ACCOUNT</span><span class="bank-dot"></span></div>
+      <div class="bank-balance"><span class="bank-cur" id="bankBalance">$0</span><span class="bank-sub" id="bankSub">LIQUID · CONFIRMED</span></div>
+      <div class="bank-actions">
+        <button class="bank-btn deposit" id="bankDepositBtn">▸ DEPOSIT</button>
+        <button class="bank-btn add" id="bankAddBtn">＋ ADD</button>
+      </div>
+      <div class="bank-log" id="bankLog"></div>
     </div>
   </section>
 
@@ -205,9 +253,8 @@ const PROTO=[
   ['physical','Physical Training'],['visualization','Evening Visualization'],['integration','Daily Integration']
 ];
 const PROTO_TARGET=30;
-const INC_TARGETS={prop:40000,live:20000,digital:50000};
 
-// ============ TODAY ============
+// ============ TODAY: habits dropdown ============
 function renderToday(){
   $('todayDate').textContent=todayKey();
   const s=loadMain(); const tk=todayKey();
@@ -219,28 +266,66 @@ function renderToday(){
   $('habitList').innerHTML=HABITS.map(h=>
     '<div class="hbit'+(s.habits[tk][h.id]?' done':'')+'" data-h="'+h.id+'"><div class="box"></div><span class="tag">'+h.layer+'</span><span class="txt">'+esc(h.text)+'</span></div>'
   ).join('');
-  $('habitList').querySelectorAll('[data-h]').forEach(el=>el.onclick=()=>{
+  $('habitList').querySelectorAll('[data-h]').forEach(el=>el.onclick=(e)=>{
+    e.stopPropagation();
     const st=loadMain(); st.habits=st.habits||{}; st.habits[tk]=st.habits[tk]||{};
     const id=el.dataset.h; st.habits[tk][id]=!st.habits[tk][id]; saveMain(st); renderToday();
   });
-  // glance
-  const inc=s.income||{}; let tot=0; Object.keys(INC_TARGETS).forEach(k=>tot+=(+inc[k]||0));
-  $('incTot').textContent='$'+tot.toLocaleString();
-  $('incBar').style.width=Math.min(100,tot/110000*100)+'%';
-  const bank=(s.bank&&typeof s.bank.balance==='number')?s.bank.balance:0;
-  $('bankBal').textContent='$'+bank.toLocaleString();
-  const todos=Array.isArray(s.todos)?s.todos:[];
-  $('todoOpen').textContent=todos.filter(t=>!t.done).length;
+  renderBank();
+}
+function wireToday(){
+  $('habitDropHead').onclick=()=>$('habitDrop').classList.toggle('open');
 }
 
-// ============ PROTOCOLS ============
+// ============ REAL BANK ACCOUNT (same state.bank as desktop) ============
+function bankFmtMoney(n){
+  const abs=Math.abs(n), sign=n<0?'-':'';
+  if(abs>=1000000) return sign+'$'+(abs/1000000).toFixed(2)+'M';
+  if(abs>=10000)   return sign+'$'+Math.round(abs/1000)+'K';
+  return sign+'$'+abs.toLocaleString('en-US',{maximumFractionDigits:2});
+}
+function bankFmtTs(iso){try{const d=new Date(iso);return d.toLocaleString('en-US',{month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit'}).toUpperCase();}catch(e){return'';}}
+function renderBank(){
+  const s=loadMain(); s.bank=s.bank||{balance:0,log:[]};
+  if(typeof s.bank.balance!=='number')s.bank.balance=0;
+  if(!Array.isArray(s.bank.log))s.bank.log=[];
+  $('bankBalance').textContent=bankFmtMoney(s.bank.balance);
+  $('bankSub').textContent=s.bank.balance>=0?'LIQUID · CONFIRMED':'OVERDRAWN';
+  const log=s.bank.log;
+  $('bankLog').innerHTML=log.length?log.slice().reverse().slice(0,40).map(e=>{
+    const cls=e.amount<0?'neg':'', sign=e.amount>=0?'+':'', note=e.note?' · '+esc(e.note):'';
+    return '<div class="bank-log-entry"><span class="bl-ts">'+bankFmtTs(e.ts)+note+'</span><span class="bl-amt '+cls+'">'+sign+bankFmtMoney(e.amount)+'</span></div>';
+  }).join(''):'<div class="bank-log-empty">— NO DEPOSITS YET —</div>';
+}
+function bankAdd(amount,note){
+  if(isNaN(amount)||amount===0)return;
+  const s=loadMain(); s.bank=s.bank||{balance:0,log:[]};
+  if(typeof s.bank.balance!=='number')s.bank.balance=0;
+  if(!Array.isArray(s.bank.log))s.bank.log=[];
+  s.bank.balance=+(s.bank.balance+amount).toFixed(2);
+  s.bank.log.push({amount:amount,ts:new Date().toISOString(),note:note||''});
+  saveMain(s); renderBank();
+}
+function bankPrompt(label,sign){
+  const raw=prompt(label+' — enter $ amount (use minus sign for withdrawal):');
+  if(raw===null)return null;
+  const n=parseFloat(String(raw).replace(/[^0-9.\-]/g,''));
+  if(isNaN(n)||n===0){alert('Invalid amount.');return null;}
+  return sign==='pos'?Math.abs(n):n;
+}
+function wireBank(){
+  $('bankDepositBtn').onclick=()=>{const a=bankPrompt('DEPOSIT','pos');if(a===null)return;const note=prompt('Note (optional):')||'';bankAdd(a,note);};
+  $('bankAddBtn').onclick=()=>{const a=bankPrompt('ADD / ADJUST');if(a===null)return;const note=prompt('Note (optional):')||'';bankAdd(a,note);};
+}
+
+// ============ PROTOCOLS (slim) ============
 function renderProto(){
   const t=loadTrack(); t.protocols=t.protocols||{};
   $('protoList').innerHTML=PROTO.map(([k,label])=>{
     const c=t.protocols[k]||0; const pct=Math.min(100,c/PROTO_TARGET*100);
-    return '<div class="prow"><div class="pname">'+esc(label)+' <b>· '+c+'/'+PROTO_TARGET+'</b></div>'
-      +'<div class="row"><div class="bar '+(c>=PROTO_TARGET?'green':'')+'" style="flex:1"><i style="width:'+pct+'%"></i></div>'
-      +'<div class="stepper"><button class="minus" data-pk="'+k+'" data-d="-1">−</button><span class="count">'+c+'</span><button data-pk="'+k+'" data-d="1">+</button></div></div></div>';
+    return '<div class="prow"><div class="pinfo"><div class="pname">'+esc(label)+' <b>· '+c+'/'+PROTO_TARGET+'</b></div>'
+      +'<div class="bar '+(c>=PROTO_TARGET?'green':'')+'" style="margin-top:4px"><i style="width:'+pct+'%"></i></div></div>'
+      +'<div class="stepper"><button class="minus" data-pk="'+k+'" data-d="-1">−</button><span class="count">'+c+'</span><button data-pk="'+k+'" data-d="1">+</button></div></div>';
   }).join('');
   $('protoList').querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{
     const tr=loadTrack(); tr.protocols=tr.protocols||{};
@@ -328,7 +413,7 @@ function showTab(name){
 document.querySelectorAll('nav.tabbar button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 
 // init
-wireProto(); wireNotes(); wireFocus(); wireVortex();
+wireToday(); wireBank(); wireProto(); wireNotes(); wireFocus(); wireVortex();
 renderToday();
 </script>
 
