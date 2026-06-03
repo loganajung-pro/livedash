@@ -710,13 +710,17 @@ function wireFitness(){
 
 // ============ tabs ============
 const RENDER={today:renderToday,protocols:renderProto,notes:renderNotes,focus:renderFocus,vortex:renderVortex,fitness:renderFitness};
+let currentTab='today';
 function showTab(name){
+  currentTab=name;
   document.querySelectorAll('section').forEach(s=>s.classList.toggle('active',s.id==='tab-'+name));
   document.querySelectorAll('nav.tabbar button').forEach(b=>b.classList.toggle('on',b.dataset.tab===name));
   (RENDER[name]||(()=>{}))();
   window.scrollTo({top:0});
 }
 document.querySelectorAll('nav.tabbar button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+// Soft refresh used by cloud-sync to apply remote changes WITHOUT reloading (which would kick back to the home hub).
+window.__softRefresh=function(){ if(!document.body.classList.contains('inapp'))return; const a=document.activeElement; if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return; try{(RENDER[currentTab]||(()=>{}))();}catch(e){} };
 
 // ============ login gate (passcode, like desktop) ============
 (function wireAuth(){
@@ -800,7 +804,7 @@ renderHome();
     if(dirty){ await pushNow(); signedIn(); return; }
     const {data,error}=await sb.from('app_state').select('data').eq('user_id',user.id).maybeSingle();
     if(error){signedIn('! '+error.message);return;}
-    if(data&&data.data){const ch=applyBundle(data.data);if(ch&&!sessionStorage.getItem('idpro-pulled')){sessionStorage.setItem('idpro-pulled','1');location.reload();return;}}
+    if(data&&data.data){if(applyBundle(data.data)&&window.__softRefresh)window.__softRefresh();}
     else{await pushNow();}
     lastSnap=snap(); signedIn();
   }
@@ -825,7 +829,7 @@ renderHome();
   document.addEventListener('visibilitychange',()=>{ if(document.hidden) checkPush(true); });
   window.addEventListener('pagehide',()=>checkPush(true));
   window.addEventListener('storage',e=>{ if(e.key&&SYNC_KEYS.indexOf(e.key)>-1) checkPush(false); });
-  function subscribe(){if(channel)return;channel=sb.channel('app_state_'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'app_state',filter:'user_id=eq.'+user.id},p=>{const d=p.new&&p.new.data;if(d&&!dirty&&applyBundle(d))location.reload();}).subscribe();}
+  function subscribe(){if(channel)return;channel=sb.channel('app_state_'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'app_state',filter:'user_id=eq.'+user.id},p=>{const d=p.new&&p.new.data;if(!d||dirty)return;const a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return;if(applyBundle(d)&&window.__softRefresh)window.__softRefresh();}).subscribe();}
   sb.auth.onAuthStateChange((_e,session)=>{user=session?session.user:null;if(user){subscribe();pull();}else{if(channel){sb.removeChannel(channel);channel=null;}signedOut();}});
   sb.auth.getSession().then(({data})=>{if(!data.session&&!user)signedOut();});
 })();
