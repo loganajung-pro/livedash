@@ -537,11 +537,11 @@ let fitTab='workout', fitDate=todayKey();
 function fEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fnum(v){const n=parseFloat(v);return isNaN(n)?0:n;}
 function fr(n){return Math.round(n*10)/10;}
-function fmealRows(n){return Array.from({length:n},()=>({food:'',cal:'',pro:'',fat:''}));}
-function fblankDay(){return{workout:Array.from({length:10},()=>({lift:'',weight:'',reps:''})),burned:'',fasted:'',meals:{meal1:{name:'',rows:fmealRows(6)},meal2:{name:'',rows:fmealRows(6)},meal3:{name:'',rows:fmealRows(6)},snack:{name:'',rows:fmealRows(3)},supp:{name:'',cal:'',pro:'',fat:''},water:''}};}
+function fmealRows(n){return Array.from({length:n},()=>({food:'',cal:'',pro:'',fat:'',carb:''}));}
+function fblankDay(){return{workout:Array.from({length:10},()=>({lift:'',weight:'',reps:''})),burned:'',fasted:'',meals:{meal1:{name:'',rows:fmealRows(6)},meal2:{name:'',rows:fmealRows(6)},meal3:{name:'',rows:fmealRows(6)},snack:{name:'',rows:fmealRows(3)},supp:{name:'',cal:'',pro:'',fat:'',carb:''},water:''}};}
 function fgetDay(s,d){if(!s.days[d])s.days[d]=fblankDay();const day=s.days[d];if(!day.meals)day.meals=fblankDay().meals;if(day.fasted==null)day.fasted='';return day;}
-function fmealSub(m){let cal=0,pro=0,fat=0;m.rows.forEach(x=>{cal+=fnum(x.cal);pro+=fnum(x.pro);fat+=fnum(x.fat);});return{cal:fr(cal),pro:fr(pro),fat:fr(fat)};}
-function fdayTot(day){let cal=0,pro=0,fat=0;['meal1','meal2','meal3','snack'].forEach(k=>{day.meals[k].rows.forEach(x=>{cal+=fnum(x.cal);pro+=fnum(x.pro);fat+=fnum(x.fat);});});cal+=fnum(day.meals.supp.cal);pro+=fnum(day.meals.supp.pro);fat+=fnum(day.meals.supp.fat);return{cal:fr(cal),pro:fr(pro),fat:fr(fat),burned:fnum(day.burned),fasted:fnum(day.fasted),water:day.meals.water};}
+function fmealSub(m){let cal=0,pro=0,fat=0,carb=0;m.rows.forEach(x=>{cal+=fnum(x.cal);pro+=fnum(x.pro);fat+=fnum(x.fat);carb+=fnum(x.carb);});return{cal:fr(cal),pro:fr(pro),fat:fr(fat),carb:fr(carb)};}
+function fdayTot(day){let cal=0,pro=0,fat=0,carb=0;['meal1','meal2','meal3','snack'].forEach(k=>{day.meals[k].rows.forEach(x=>{cal+=fnum(x.cal);pro+=fnum(x.pro);fat+=fnum(x.fat);carb+=fnum(x.carb);});});cal+=fnum(day.meals.supp.cal);pro+=fnum(day.meals.supp.pro);fat+=fnum(day.meals.supp.fat);carb+=fnum(day.meals.supp.carb);return{cal:fr(cal),pro:fr(pro),fat:fr(fat),carb:fr(carb),burned:fnum(day.burned),fasted:fnum(day.fasted),water:day.meals.water};}
 function fdayHas(day){if(!day)return false;if(fnum(day.burned)>0||fnum(day.fasted)>0)return true;if(day.workout.some(x=>x.lift||x.weight||x.reps))return true;const m=day.meals;if(!m)return false;if(m.water)return true;if(m.supp.name||m.supp.cal||m.supp.pro||m.supp.fat)return true;return['meal1','meal2','meal3','snack'].some(k=>m[k].name||m[k].rows.some(x=>x.food||x.cal||x.pro||x.fat));}
 function fparse(s){const p=String(s).split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
 function ffmt(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
@@ -565,13 +565,14 @@ function fMealCard(label,key,n,day){
   const m=day.meals[key];const sub=fmealSub(m);let rows='';
   for(let i=0;i<n;i++){const x=m.rows[i];
     rows+='<div class="fit-meal-row"><input type="text" data-fit="meal" data-m="'+key+'" data-i="'+i+'" data-f="food" placeholder="food" value="'+fEsc(x.food)+'">'
-      +'<div class="fit-3col"><input type="text" data-fit="meal" data-m="'+key+'" data-i="'+i+'" data-f="cal" placeholder="cal" value="'+fEsc(x.cal)+'">'
+      +'<div class="fit-3col" style="grid-template-columns:1fr 1fr 1fr 1fr"><input type="text" data-fit="meal" data-m="'+key+'" data-i="'+i+'" data-f="cal" placeholder="cal" value="'+fEsc(x.cal)+'">'
       +'<input type="text" data-fit="meal" data-m="'+key+'" data-i="'+i+'" data-f="pro" placeholder="protein" value="'+fEsc(x.pro)+'">'
-      +'<input type="text" data-fit="meal" data-m="'+key+'" data-i="'+i+'" data-f="fat" placeholder="fat" value="'+fEsc(x.fat)+'"></div></div>';
+      +'<input type="text" data-fit="meal" data-m="'+key+'" data-i="'+i+'" data-f="fat" placeholder="fat" value="'+fEsc(x.fat)+'">'
+      +'<input type="text" data-fit="meal" data-m="'+key+'" data-i="'+i+'" data-f="carb" placeholder="carbs" value="'+fEsc(x.carb)+'"></div></div>';
   }
   return '<div class="fit-card"><div class="fit-card-h">'+label+'</div>'
     +'<input type="text" data-fit="mealname" data-m="'+key+'" placeholder="(insert meal)" value="'+fEsc(m.name)+'">'
-    +rows+'<div class="fit-sub" data-sub="'+key+'">CAL <b>'+sub.cal+'</b> · PRO <b>'+sub.pro+'g</b> · FAT <b>'+sub.fat+'g</b></div></div>';
+    +rows+'<div class="fit-sub" data-sub="'+key+'">CAL <b>'+sub.cal+'</b> · PRO <b>'+sub.pro+'g</b> · FAT <b>'+sub.fat+'g</b> · CARB <b>'+sub.carb+'g</b></div></div>';
 }
 function fMeals(){
   const s=loadFit();const day=fgetDay(s,fitDate);const t=fdayTot(day);
@@ -579,32 +580,34 @@ function fMeals(){
     +'<div class="fit-stat"><div class="sl">Caloric Intake</div><div class="sv" id="ftCal">'+t.cal+'</div></div>'
     +'<div class="fit-stat"><div class="sl">Total Protein</div><div class="sv" id="ftPro">'+t.pro+'<small>g</small></div></div>'
     +'<div class="fit-stat"><div class="sl">Total Fat</div><div class="sv" id="ftFat">'+t.fat+'<small>g</small></div></div>'
+    +'<div class="fit-stat"><div class="sl">Total Carbs</div><div class="sv" id="ftCarb">'+t.carb+'<small>g</small></div></div>'
     +'<div class="fit-stat"><div class="sl">Hours Fasted</div><input type="text" data-fit="fasted" placeholder="0" value="'+fEsc(day.fasted)+'"></div>'
     +'</div>';
   h+=fMealCard('MEAL 1','meal1',6,day)+fMealCard('MEAL 2','meal2',6,day)+fMealCard('MEAL 3','meal3',6,day)+fMealCard('SNACK','snack',3,day);
   h+='<div class="fit-card"><div class="fit-card-h">SUPPLEMENTS</div>'
     +'<input type="text" data-fit="suppname" placeholder="(insert supplement)" value="'+fEsc(day.meals.supp.name)+'">'
-    +'<div class="fit-3col"><input type="text" data-fit="supp" data-f="cal" placeholder="cal" value="'+fEsc(day.meals.supp.cal)+'">'
+    +'<div class="fit-3col" style="grid-template-columns:1fr 1fr 1fr 1fr"><input type="text" data-fit="supp" data-f="cal" placeholder="cal" value="'+fEsc(day.meals.supp.cal)+'">'
     +'<input type="text" data-fit="supp" data-f="pro" placeholder="protein" value="'+fEsc(day.meals.supp.pro)+'">'
-    +'<input type="text" data-fit="supp" data-f="fat" placeholder="fat" value="'+fEsc(day.meals.supp.fat)+'"></div></div>';
+    +'<input type="text" data-fit="supp" data-f="fat" placeholder="fat" value="'+fEsc(day.meals.supp.fat)+'">'
+    +'<input type="text" data-fit="supp" data-f="carb" placeholder="carbs" value="'+fEsc(day.meals.supp.carb)+'"></div></div>';
   h+='<div class="fit-card"><div class="fit-card-h">WATER INTAKE</div><input type="text" data-fit="water" placeholder="e.g. 3.5 L / 120 oz" value="'+fEsc(day.meals.water)+'"></div>';
   return h;
 }
 function fRecalc(){
   const s=loadFit();const day=fgetDay(s,fitDate);
-  ['meal1','meal2','meal3','snack'].forEach(k=>{const sub=fmealSub(day.meals[k]);const el=document.querySelector('[data-sub="'+k+'"]');if(el)el.innerHTML='CAL <b>'+sub.cal+'</b> · PRO <b>'+sub.pro+'g</b> · FAT <b>'+sub.fat+'g</b>';});
-  const t=fdayTot(day);const c=$('ftCal'),p=$('ftPro'),f=$('ftFat');if(c)c.textContent=t.cal;if(p)p.innerHTML=t.pro+'<small>g</small>';if(f)f.innerHTML=t.fat+'<small>g</small>';
+  ['meal1','meal2','meal3','snack'].forEach(k=>{const sub=fmealSub(day.meals[k]);const el=document.querySelector('[data-sub="'+k+'"]');if(el)el.innerHTML='CAL <b>'+sub.cal+'</b> · PRO <b>'+sub.pro+'g</b> · FAT <b>'+sub.fat+'g</b> · CARB <b>'+sub.carb+'g</b>';});
+  const t=fdayTot(day);const c=$('ftCal'),p=$('ftPro'),f=$('ftFat'),cb=$('ftCarb');if(c)c.textContent=t.cal;if(p)p.innerHTML=t.pro+'<small>g</small>';if(f)f.innerHTML=t.fat+'<small>g</small>';if(cb)cb.innerHTML=t.carb+'<small>g</small>';
 }
 function fDayCard(s,d){
   const day=s.days[d];const t=fdayTot(day);let detail='';
-  [['meal1','Meal 1'],['meal2','Meal 2'],['meal3','Meal 3'],['snack','Snack']].forEach(p=>{const k=p[0],lbl=p[1];const m=day.meals[k];const items=m.rows.filter(x=>x.food||x.cal||x.pro||x.fat);if(m.name||items.length){detail+='<span class="dl">'+lbl+(m.name?' · '+fEsc(m.name):'')+'</span>'+(items.map(x=>fEsc(x.food||'—')+' — '+fnum(x.cal)+' cal / '+fnum(x.pro)+'p / '+fnum(x.fat)+'f').join('<br>')||'—');}});
-  const sp=day.meals.supp;if(sp.name||sp.cal||sp.pro||sp.fat)detail+='<span class="dl">Supplements'+(sp.name?' · '+fEsc(sp.name):'')+'</span>'+fnum(sp.cal)+' cal / '+fnum(sp.pro)+'p / '+fnum(sp.fat)+'f';
+  [['meal1','Meal 1'],['meal2','Meal 2'],['meal3','Meal 3'],['snack','Snack']].forEach(p=>{const k=p[0],lbl=p[1];const m=day.meals[k];const items=m.rows.filter(x=>x.food||x.cal||x.pro||x.fat||x.carb);if(m.name||items.length){detail+='<span class="dl">'+lbl+(m.name?' · '+fEsc(m.name):'')+'</span>'+(items.map(x=>fEsc(x.food||'—')+' — '+fnum(x.cal)+' cal / '+fnum(x.pro)+'p / '+fnum(x.fat)+'f / '+fnum(x.carb)+'c').join('<br>')||'—');}});
+  const sp=day.meals.supp;if(sp.name||sp.cal||sp.pro||sp.fat||sp.carb)detail+='<span class="dl">Supplements'+(sp.name?' · '+fEsc(sp.name):'')+'</span>'+fnum(sp.cal)+' cal / '+fnum(sp.pro)+'p / '+fnum(sp.fat)+'f / '+fnum(sp.carb)+'c';
   if(day.meals.water)detail+='<span class="dl">Water</span>'+fEsc(day.meals.water);
   const lifts=day.workout.filter(x=>x.lift||x.weight||x.reps);
   if(lifts.length)detail+='<span class="dl">Workout</span>'+lifts.map(x=>fEsc(x.lift||'—')+' — '+fEsc(x.weight||'—')+' × '+fEsc(x.reps||'—')).join('<br>');
   if(t.burned)detail+='<span class="dl">Calories Burned</span>'+t.burned;
   if(fnum(day.fasted))detail+='<span class="dl">Hours Fasted</span>'+fEsc(day.fasted);
-  return '<div class="fit-day"><div class="fit-day-h"><span class="dd">'+fdayName(d).toUpperCase()+' · '+fpretty(d)+'</span><span class="dm">CAL <b>'+t.cal+'</b> · PRO <b>'+t.pro+'g</b></span><span class="chev">▾</span></div><div class="fit-day-b"><div class="fit-day-detail">'+(detail||'—')+'</div></div></div>';
+  return '<div class="fit-day"><div class="fit-day-h"><span class="dd">'+fdayName(d).toUpperCase()+' · '+fpretty(d)+'</span><span class="dm">CAL <b>'+t.cal+'</b> · P <b>'+t.pro+'</b> · F <b>'+t.fat+'</b> · C <b>'+t.carb+'</b></span><span class="chev">▾</span></div><div class="fit-day-b"><div class="fit-day-detail">'+(detail||'—')+'</div></div></div>';
 }
 function fWeekly(){
   const s=loadFit();const dates=Object.keys(s.days).filter(d=>fdayHas(s.days[d])).sort();
@@ -612,14 +615,15 @@ function fWeekly(){
   const weeks={};dates.forEach(d=>{const w=fweekStart(d);(weeks[w]=weeks[w]||[]).push(d);});
   const wkeys=Object.keys(weeks).sort().reverse();let h='';
   wkeys.forEach((wk,wi)=>{
-    const wEnd=fadd(wk,6);let cal=0,pro=0,fat=0,burn=0,fast=0,sC=0,sP=0,sF=0;const waters=[];
-    const dayH=weeks[wk].sort().map(d=>{const day=s.days[d];const t=fdayTot(day);cal+=t.cal;pro+=t.pro;fat+=t.fat;burn+=t.burned;fast+=fnum(day.fasted);sC+=fnum(day.meals.supp.cal);sP+=fnum(day.meals.supp.pro);sF+=fnum(day.meals.supp.fat);if(day.meals.water)waters.push(fpretty(d)+': '+fEsc(day.meals.water));return fDayCard(s,d);}).join('');
+    const wEnd=fadd(wk,6);let cal=0,pro=0,fat=0,carb=0,burn=0,fast=0,sC=0,sP=0,sF=0;const waters=[];
+    const dayH=weeks[wk].sort().map(d=>{const day=s.days[d];const t=fdayTot(day);cal+=t.cal;pro+=t.pro;fat+=t.fat;carb+=t.carb;burn+=t.burned;fast+=fnum(day.fasted);sC+=fnum(day.meals.supp.cal);sP+=fnum(day.meals.supp.pro);sF+=fnum(day.meals.supp.fat);if(day.meals.water)waters.push(fpretty(d)+': '+fEsc(day.meals.water));return fDayCard(s,d);}).join('');
     const open=wi===0?' open':'';
     h+='<div class="fit-week'+open+'"><div class="fit-week-h"><div class="wt"><div class="tt">WEEK OF '+fpretty(wk).toUpperCase()+' – '+fpretty(wEnd).toUpperCase()+'</div><div class="ts">'+weeks[wk].length+' DAY(S) · '+wk+'</div></div><span class="wk">'+fr(cal)+' CAL</span><span class="chev">▾</span></div>'
       +'<div class="fit-week-b"><div class="fit-stats" style="grid-template-columns:1fr 1fr 1fr">'
       +'<div class="fit-stat"><div class="sl">Calories</div><div class="sv">'+fr(cal)+'</div></div>'
       +'<div class="fit-stat"><div class="sl">Protein</div><div class="sv">'+fr(pro)+'<small>g</small></div></div>'
       +'<div class="fit-stat"><div class="sl">Fat</div><div class="sv">'+fr(fat)+'<small>g</small></div></div>'
+      +'<div class="fit-stat"><div class="sl">Carbs</div><div class="sv">'+fr(carb)+'<small>g</small></div></div>'
       +'<div class="fit-stat"><div class="sl">Burned</div><div class="sv">'+fr(burn)+'</div></div>'
       +'<div class="fit-stat"><div class="sl">Hrs Fasted</div><div class="sv">'+fr(fast)+'<small>h</small></div></div>'
       +'<div class="fit-stat"><div class="sl">Supp C/P/F</div><div class="sv" style="font-size:12px">'+fr(sC)+'/'+fr(sP)+'/'+fr(sF)+'</div></div>'
@@ -636,6 +640,7 @@ function fDaily(){
     +'<div class="fit-stat"><div class="sl">Cal Intake</div><div class="sv">'+t.cal+'</div></div>'
     +'<div class="fit-stat"><div class="sl">Protein</div><div class="sv">'+t.pro+'<small>g</small></div></div>'
     +'<div class="fit-stat"><div class="sl">Fat</div><div class="sv">'+t.fat+'<small>g</small></div></div>'
+    +'<div class="fit-stat"><div class="sl">Carbs</div><div class="sv">'+t.carb+'<small>g</small></div></div>'
     +'<div class="fit-stat"><div class="sl">Hrs Fasted</div><div class="sv">'+t.fasted+'<small>h</small></div></div>'
     +'<div class="fit-stat"><div class="sl">Burned</div><div class="sv">'+t.burned+'</div></div>'
     +'<div class="fit-stat"><div class="sl">Water</div><div class="sv" style="font-size:12px">'+(day.meals.water?fEsc(day.meals.water):'—')+'</div></div>'
@@ -646,26 +651,26 @@ function fDaily(){
   h+='</div>';
   [['meal1','Meal 1'],['meal2','Meal 2'],['meal3','Meal 3'],['snack','Snack']].forEach(p=>{const k=p[0],lbl=p[1];const m=day.meals[k];const items=m.rows.filter(x=>x.food||x.cal||x.pro||x.fat);const sub=fmealSub(m);
     h+='<div class="fit-sumblock"><div class="sh"><span>'+lbl+(m.name?' · '+fEsc(m.name):'')+'</span><b>'+sub.cal+' CAL</b></div>';
-    if(items.length){h+=items.map(x=>'<div class="fit-sumrow"><span>'+fEsc(x.food||'—')+'</span><span class="m">'+fnum(x.cal)+' / '+fnum(x.pro)+'p / '+fnum(x.fat)+'f</span></div>').join('');h+='<div class="fit-sumrow"><span class="m">Subtotal</span><span class="m">'+sub.cal+' / '+sub.pro+'g / '+sub.fat+'g</span></div>';}
+    if(items.length){h+=items.map(x=>'<div class="fit-sumrow"><span>'+fEsc(x.food||'—')+'</span><span class="m">'+fnum(x.cal)+' / '+fnum(x.pro)+'p / '+fnum(x.fat)+'f / '+fnum(x.carb)+'c</span></div>').join('');h+='<div class="fit-sumrow"><span class="m">Subtotal</span><span class="m">'+sub.cal+' / '+sub.pro+'g / '+sub.fat+'g / '+sub.carb+'g</span></div>';}
     else h+='<div class="fit-sumempty">No items logged.</div>';
     h+='</div>';
   });
   const sp=day.meals.supp;
-  h+='<div class="fit-sumblock"><div class="sh"><span>Supplements'+(sp.name?' · '+fEsc(sp.name):'')+'</span><b>'+fnum(sp.cal)+' CAL</b></div><div class="fit-sumrow"><span class="m">Cal / Pro / Fat</span><span>'+fnum(sp.cal)+' / '+fnum(sp.pro)+'g / '+fnum(sp.fat)+'g</span></div></div>';
+  h+='<div class="fit-sumblock"><div class="sh"><span>Supplements'+(sp.name?' · '+fEsc(sp.name):'')+'</span><b>'+fnum(sp.cal)+' CAL</b></div><div class="fit-sumrow"><span class="m">Cal / Pro / Fat / Carb</span><span>'+fnum(sp.cal)+' / '+fnum(sp.pro)+'g / '+fnum(sp.fat)+'g / '+fnum(sp.carb)+'g</span></div></div>';
   h+='<div class="fit-sumblock"><div class="sh"><span>Water Intake</span></div><div class="fit-sumrow"><span>'+(day.meals.water?fEsc(day.meals.water):'—')+'</span></div></div>';
   return h;
 }
 function fBuildMd(date){
   const s=loadFit();const day=fgetDay(s,date);const t=fdayTot(day);
   let md='---\ndate: '+date+'\ntype: fitness-daily\ntags: [identity-pro, fitness, daily-summary]\n---\n\n# Fitness Daily Summary · '+date+'\n\n';
-  md+='**Caloric Intake:** '+t.cal+' kcal  \n**Total Protein:** '+t.pro+' g  \n**Total Fat:** '+t.fat+' g  \n**Hours Fasted:** '+t.fasted+' h  \n**Calories Burned:** '+t.burned+' kcal  \n**Water Intake:** '+(day.meals.water||'—')+'\n\n## Workout\n\n';
+  md+='**Caloric Intake:** '+t.cal+' kcal  \n**Total Protein:** '+t.pro+' g  \n**Total Fat:** '+t.fat+' g  \n**Total Carbs:** '+t.carb+' g  \n**Hours Fasted:** '+t.fasted+' h  \n**Calories Burned:** '+t.burned+' kcal  \n**Water Intake:** '+(day.meals.water||'—')+'\n\n## Workout\n\n';
   const lifts=day.workout.filter(x=>x.lift||x.weight||x.reps);
   if(lifts.length)md+='| Lift | Weight | Time / Reps |\n|---|---|---|\n'+lifts.map(x=>'| '+(x.lift||'—')+' | '+(x.weight||'—')+' | '+(x.reps||'—')+' |').join('\n')+'\n\n**Total Calories Burned:** '+t.burned+' kcal\n\n';
   else md+='_No lifts logged._\n\n';
   md+='## Meals\n\n';
-  [['meal1','Meal 1'],['meal2','Meal 2'],['meal3','Meal 3'],['snack','Snack']].forEach(p=>{const k=p[0],lbl=p[1];const m=day.meals[k];const items=m.rows.filter(x=>x.food||x.cal||x.pro||x.fat);const sub=fmealSub(m);md+='### '+lbl+(m.name?' — '+m.name:'')+'\n\n';if(items.length)md+='| Food | Calories | Protein | Fat |\n|---|---|---|---|\n'+items.map(x=>'| '+(x.food||'—')+' | '+fnum(x.cal)+' | '+fnum(x.pro)+'g | '+fnum(x.fat)+'g |').join('\n')+'\n| **Subtotal** | **'+sub.cal+'** | **'+sub.pro+'g** | **'+sub.fat+'g** |\n\n';else md+='_No items logged._\n\n';});
+  [['meal1','Meal 1'],['meal2','Meal 2'],['meal3','Meal 3'],['snack','Snack']].forEach(p=>{const k=p[0],lbl=p[1];const m=day.meals[k];const items=m.rows.filter(x=>x.food||x.cal||x.pro||x.fat);const sub=fmealSub(m);md+='### '+lbl+(m.name?' — '+m.name:'')+'\n\n';if(items.length)md+='| Food | Calories | Protein | Fat | Carbs |\n|---|---|---|---|---|\n'+items.map(x=>'| '+(x.food||'—')+' | '+fnum(x.cal)+' | '+fnum(x.pro)+'g | '+fnum(x.fat)+'g | '+fnum(x.carb)+'g |').join('\n')+'\n| **Subtotal** | **'+sub.cal+'** | **'+sub.pro+'g** | **'+sub.fat+'g** | **'+sub.carb+'g** |\n\n';else md+='_No items logged._\n\n';});
   const sp=day.meals.supp;
-  md+='### Supplements'+(sp.name?' — '+sp.name:'')+'\n\nCalories: '+fnum(sp.cal)+' · Protein: '+fnum(sp.pro)+'g · Fat: '+fnum(sp.fat)+'g\n\n### Water Intake\n\n'+(day.meals.water||'—')+'\n\n---\n*Logged via Identity Protocol OS · Fitness.*\n';
+  md+='### Supplements'+(sp.name?' — '+sp.name:'')+'\n\nCalories: '+fnum(sp.cal)+' · Protein: '+fnum(sp.pro)+'g · Fat: '+fnum(sp.fat)+'g · Carbs: '+fnum(sp.carb)+'g\n\n### Water Intake\n\n'+(day.meals.water||'—')+'\n\n---\n*Logged via Identity Protocol OS · Fitness.*\n';
   return md;
 }
 function fDownload(date){const md=fBuildMd(date);const b=new Blob([md],{type:'text/markdown;charset=utf-8'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=date+'-Fitness-Daily.md';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u);}

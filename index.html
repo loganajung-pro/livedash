@@ -827,7 +827,7 @@
   .fit-meal-sub{display:flex;justify-content:flex-end;gap:18px;padding:8px 12px;font-family:"Share Tech Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--text-dim);background:rgba(0,196,255,.03)}
   .fit-meal-sub b{color:var(--amber);font-weight:400}
   .fit-supp{display:grid;grid-template-columns:1fr;gap:8px}
-  .fit-supp-row{display:grid;grid-template-columns:1fr 110px 110px 110px;gap:8px;align-items:center}
+  .fit-supp-row{display:grid;grid-template-columns:1fr 96px 96px 96px 96px;gap:8px;align-items:center}
   .fit-supp-row .scell{background:rgba(0,20,40,.5);border:1px solid var(--line);color:var(--text);font-family:"JetBrains Mono",monospace;font-size:12px;padding:8px 10px;outline:none}
   .fit-supp-row .scell:focus{border-color:var(--cy-0)}
   .fit-water{display:flex;align-items:center;gap:14px;padding:14px 12px;border:1px solid var(--line);background:linear-gradient(90deg, rgba(0,196,255,.06), transparent);margin-bottom:16px}
@@ -3027,7 +3027,7 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
   function r(n){return Math.round(n*10)/10;}
   function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-  function mealRows(n){return Array.from({length:n},()=>({food:'',cal:'',pro:'',fat:''}));}
+  function mealRows(n){return Array.from({length:n},()=>({food:'',cal:'',pro:'',fat:'',carb:''}));}
   function blankDay(){return{
     workout:Array.from({length:10},()=>({lift:'',weight:'',reps:''})),
     burned:'',
@@ -3037,13 +3037,13 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
       meal2:{name:'',rows:mealRows(6)},
       meal3:{name:'',rows:mealRows(6)},
       snack:{name:'',rows:mealRows(3)},
-      supp:{name:'',cal:'',pro:'',fat:''},
+      supp:{name:'',cal:'',pro:'',fat:'',carb:''},
       water:''
     }
   };}
   function getDay(d){if(!st.days[d])st.days[d]=blankDay();return st.days[d];}
-  function mealSub(m){let cal=0,pro=0,fat=0;m.rows.forEach(x=>{cal+=num(x.cal);pro+=num(x.pro);fat+=num(x.fat);});return{cal:r(cal),pro:r(pro),fat:r(fat)};}
-  function dayTotals(day){let cal=0,pro=0,fat=0;['meal1','meal2','meal3','snack'].forEach(k=>{day.meals[k].rows.forEach(x=>{cal+=num(x.cal);pro+=num(x.pro);fat+=num(x.fat);});});cal+=num(day.meals.supp.cal);pro+=num(day.meals.supp.pro);fat+=num(day.meals.supp.fat);return{cal:r(cal),pro:r(pro),fat:r(fat),water:day.meals.water,burned:num(day.burned)};}
+  function mealSub(m){let cal=0,pro=0,fat=0,carb=0;m.rows.forEach(x=>{cal+=num(x.cal);pro+=num(x.pro);fat+=num(x.fat);carb+=num(x.carb);});return{cal:r(cal),pro:r(pro),fat:r(fat),carb:r(carb)};}
+  function dayTotals(day){let cal=0,pro=0,fat=0,carb=0;['meal1','meal2','meal3','snack'].forEach(k=>{day.meals[k].rows.forEach(x=>{cal+=num(x.cal);pro+=num(x.pro);fat+=num(x.fat);carb+=num(x.carb);});});cal+=num(day.meals.supp.cal);pro+=num(day.meals.supp.pro);fat+=num(day.meals.supp.fat);carb+=num(day.meals.supp.carb);return{cal:r(cal),pro:r(pro),fat:r(fat),carb:r(carb),water:day.meals.water,burned:num(day.burned)};}
   function dayHasData(day){if(!day)return false;if(num(day.burned)>0)return true;if(num(day.fasted)>0)return true;if(day.workout.some(x=>x.lift||x.weight||x.reps))return true;const m=day.meals;if(m.water)return true;if(m.supp.name||m.supp.cal||m.supp.pro||m.supp.fat)return true;return['meal1','meal2','meal3','snack'].some(k=>m[k].name||m[k].rows.some(x=>x.food||x.cal||x.pro||x.fat));}
 
   // ---------- WORKOUT ----------
@@ -3071,12 +3071,13 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
         `<td class="col-food"><input class="fit-cell" data-fit="meal" data-m="${key}" data-i="${i}" data-f="food" value="${esc(x.food)}" placeholder="food"></td>`+
         `<td><input class="fit-cell" data-fit="meal" data-m="${key}" data-i="${i}" data-f="cal" value="${esc(x.cal)}" placeholder="cal"></td>`+
         `<td><input class="fit-cell" data-fit="meal" data-m="${key}" data-i="${i}" data-f="pro" value="${esc(x.pro)}" placeholder="protein"></td>`+
-        `<td><input class="fit-cell" data-fit="meal" data-m="${key}" data-i="${i}" data-f="fat" value="${esc(x.fat)}" placeholder="fat"></td></tr>`;}
+        `<td><input class="fit-cell" data-fit="meal" data-m="${key}" data-i="${i}" data-f="fat" value="${esc(x.fat)}" placeholder="fat"></td>`+
+        `<td><input class="fit-cell" data-fit="meal" data-m="${key}" data-i="${i}" data-f="carb" value="${esc(x.carb)}" placeholder="carbs"></td></tr>`;}
     const s=mealSub(m);
     return `<div class="fit-meal"><div class="fit-meal-head"><span class="mh-lbl">${label}</span>`+
       `<input class="fit-meal-name" data-fit="mealname" data-m="${key}" value="${esc(m.name)}" placeholder="(fillable insert space)"></div>`+
-      `<table class="fit-mt"><thead><tr><th>Food</th><th>Calories</th><th>Protein</th><th>Fat</th></tr></thead><tbody>${rows}</tbody></table>`+
-      `<div class="fit-meal-sub">CAL <b id="sub-${key}-cal">${s.cal}</b> · PROTEIN <b id="sub-${key}-pro">${s.pro}g</b> · FAT <b id="sub-${key}-fat">${s.fat}g</b></div></div>`;
+      `<table class="fit-mt"><thead><tr><th>Food</th><th>Calories</th><th>Protein</th><th>Fat</th><th>Carbs</th></tr></thead><tbody>${rows}</tbody></table>`+
+      `<div class="fit-meal-sub">CAL <b id="sub-${key}-cal">${s.cal}</b> · PROTEIN <b id="sub-${key}-pro">${s.pro}g</b> · FAT <b id="sub-${key}-fat">${s.fat}g</b> · CARBS <b id="sub-${key}-carb">${s.carb}g</b></div></div>`;
   }
   function renderMeals(){
     const day=getDay(curDate);const t=dayTotals(day);
@@ -3085,11 +3086,13 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
       `<div style="padding:12px"><div class="fit-supp-row" style="margin-bottom:6px"><span></span>`+
       `<span style="color:var(--cy-2);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.18em">CALORIES</span>`+
       `<span style="color:var(--cy-2);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.18em">PROTEIN</span>`+
-      `<span style="color:var(--cy-2);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.18em">FAT</span></div>`+
+      `<span style="color:var(--cy-2);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.18em">FAT</span>`+
+      `<span style="color:var(--cy-2);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.18em">CARBS</span></div>`+
       `<div class="fit-supp-row"><span style="color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.14em">TOTAL</span>`+
       `<input class="scell" data-fit="supp" data-f="cal" value="${esc(day.meals.supp.cal)}" placeholder="cal">`+
       `<input class="scell" data-fit="supp" data-f="pro" value="${esc(day.meals.supp.pro)}" placeholder="protein">`+
-      `<input class="scell" data-fit="supp" data-f="fat" value="${esc(day.meals.supp.fat)}" placeholder="fat"></div></div></div>`;
+      `<input class="scell" data-fit="supp" data-f="fat" value="${esc(day.meals.supp.fat)}" placeholder="fat">`+
+      `<input class="scell" data-fit="supp" data-f="carb" value="${esc(day.meals.supp.carb)}" placeholder="carbs"></div></div></div>`;
     const water=`<div class="fit-water"><span class="wlbl">WATER INTAKE</span>`+
       `<input data-fit="water" value="${esc(day.meals.water)}" placeholder="e.g. 3.5 L  /  120 oz  /  8 glasses"></div>`;
     return `<div class="fit-panel active">`+
@@ -3097,6 +3100,7 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
         `<div class="fit-stat"><div class="s-lbl">Caloric Intake</div><div class="s-val" id="tot-cal">${t.cal}</div></div>`+
         `<div class="fit-stat"><div class="s-lbl">Total Protein</div><div class="s-val" id="tot-pro">${t.pro}<small>g</small></div></div>`+
         `<div class="fit-stat"><div class="s-lbl">Total Fat</div><div class="s-val" id="tot-fat">${t.fat}<small>g</small></div></div>`+
+        `<div class="fit-stat"><div class="s-lbl">Total Carbs</div><div class="s-val" id="tot-carb">${t.carb}<small>g</small></div></div>`+
         `<div class="fit-stat"><div class="s-lbl">Hours Fasted</div><input class="fit-fast-input" data-fit="fasted" value="${esc(day.fasted)}" placeholder="0"></div>`+
       `</div>`+
       mealBlock('MEAL 1','meal1',6)+mealBlock('MEAL 2','meal2',6)+mealBlock('MEAL 3','meal3',6)+mealBlock('SNACK','snack',3)+supp+water+
@@ -3106,8 +3110,8 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
   function setHtml(id,v){const e=document.getElementById(id);if(e)e.innerHTML=v;}
   function recalcLive(){
     const day=getDay(curDate);
-    ['meal1','meal2','meal3','snack'].forEach(k=>{const s=mealSub(day.meals[k]);setTxt('sub-'+k+'-cal',s.cal);setTxt('sub-'+k+'-pro',s.pro+'g');setTxt('sub-'+k+'-fat',s.fat+'g');});
-    const t=dayTotals(day);setHtml('tot-cal',t.cal);setHtml('tot-pro',t.pro+'<small>g</small>');setHtml('tot-fat',t.fat+'<small>g</small>');
+    ['meal1','meal2','meal3','snack'].forEach(k=>{const s=mealSub(day.meals[k]);setTxt('sub-'+k+'-cal',s.cal);setTxt('sub-'+k+'-pro',s.pro+'g');setTxt('sub-'+k+'-fat',s.fat+'g');setTxt('sub-'+k+'-carb',s.carb+'g');});
+    const t=dayTotals(day);setHtml('tot-cal',t.cal);setHtml('tot-pro',t.pro+'<small>g</small>');setHtml('tot-fat',t.fat+'<small>g</small>');setHtml('tot-carb',t.carb+'<small>g</small>');
   }
 
   // ---------- WEEKLY ----------
@@ -3115,9 +3119,9 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
     const day=st.days[d];const t=dayTotals(day);let detail='';
     [['meal1','Meal 1'],['meal2','Meal 2'],['meal3','Meal 3'],['snack','Snack']].forEach(([k,lbl])=>{
       const m=day.meals[k];const items=m.rows.filter(x=>x.food||x.cal||x.pro||x.fat);
-      if(m.name||items.length){detail+=`<span class="dl">${lbl}${m.name?' · '+esc(m.name):''}</span>`+(items.map(x=>`${esc(x.food||'—')} — ${num(x.cal)} cal / ${num(x.pro)}p / ${num(x.fat)}f`).join('<br>')||'—');}
+      if(m.name||items.length){detail+=`<span class="dl">${lbl}${m.name?' · '+esc(m.name):''}</span>`+(items.map(x=>`${esc(x.food||'—')} — ${num(x.cal)} cal / ${num(x.pro)}p / ${num(x.fat)}f / ${num(x.carb)}c`).join('<br>')||'—');}
     });
-    if(day.meals.supp.name||day.meals.supp.cal||day.meals.supp.pro||day.meals.supp.fat){detail+=`<span class="dl">Supplements${day.meals.supp.name?' · '+esc(day.meals.supp.name):''}</span>${num(day.meals.supp.cal)} cal / ${num(day.meals.supp.pro)}p / ${num(day.meals.supp.fat)}f`;}
+    if(day.meals.supp.name||day.meals.supp.cal||day.meals.supp.pro||day.meals.supp.fat||day.meals.supp.carb){detail+=`<span class="dl">Supplements${day.meals.supp.name?' · '+esc(day.meals.supp.name):''}</span>${num(day.meals.supp.cal)} cal / ${num(day.meals.supp.pro)}p / ${num(day.meals.supp.fat)}f / ${num(day.meals.supp.carb)}c`;}
     if(day.meals.water)detail+=`<span class="dl">Water Intake</span>${esc(day.meals.water)}`;
     const lifts=day.workout.filter(x=>x.lift||x.weight||x.reps);
     if(lifts.length)detail+=`<span class="dl">Workout</span>`+lifts.map(x=>`${esc(x.lift||'—')} — ${esc(x.weight||'—')} × ${esc(x.reps||'—')}`).join('<br>');
@@ -3125,7 +3129,7 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
     if(num(day.fasted))detail+=`<span class="dl">Hours Fasted</span>${esc(day.fasted)}`;
     return `<div class="fit-day collapsed"><div class="fit-day-head">`+
       `<span class="fit-day-date">${dayName(d).toUpperCase()} · ${prettyD(d)}</span>`+
-      `<div class="fit-day-mini">CAL <b>${t.cal}</b> · PRO <b>${t.pro}g</b> · FAT <b>${t.fat}g</b><span class="fit-chev">▾</span></div>`+
+      `<div class="fit-day-mini">CAL <b>${t.cal}</b> · PRO <b>${t.pro}g</b> · FAT <b>${t.fat}g</b> · CARB <b>${t.carb}g</b><span class="fit-chev">▾</span></div>`+
       `</div><div class="fit-day-body"><div class="fit-day-detail">${detail||'—'}</div></div></div>`;
   }
   function renderWeekly(){
@@ -3135,8 +3139,8 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
     const weekKeys=Object.keys(weeks).sort().reverse();
     let html='<div class="fit-panel active">';
     weekKeys.forEach((wk,wi)=>{
-      const wEnd=addDays(wk,6);let cal=0,pro=0,fat=0,burn=0,fast=0,sC=0,sP=0,sF=0;const waters=[];
-      const dayHtml=weeks[wk].sort().map(d=>{const day=st.days[d];const t=dayTotals(day);cal+=t.cal;pro+=t.pro;fat+=t.fat;burn+=t.burned;fast+=num(day.fasted);sC+=num(day.meals.supp.cal);sP+=num(day.meals.supp.pro);sF+=num(day.meals.supp.fat);if(day.meals.water)waters.push(prettyD(d)+': '+esc(day.meals.water));return dayCard(d);}).join('');
+      const wEnd=addDays(wk,6);let cal=0,pro=0,fat=0,carb=0,burn=0,fast=0,sC=0,sP=0,sF=0;const waters=[];
+      const dayHtml=weeks[wk].sort().map(d=>{const day=st.days[d];const t=dayTotals(day);cal+=t.cal;pro+=t.pro;fat+=t.fat;carb+=t.carb;burn+=t.burned;fast+=num(day.fasted);sC+=num(day.meals.supp.cal);sP+=num(day.meals.supp.pro);sF+=num(day.meals.supp.fat);if(day.meals.water)waters.push(prettyD(d)+': '+esc(day.meals.water));return dayCard(d);}).join('');
       const collapsed=wi===0?'':'collapsed';
       html+=`<div class="fit-week ${collapsed}"><div class="fit-week-head"><div>`+
         `<div class="fit-week-title">WEEK OF ${prettyD(wk).toUpperCase()} – ${prettyD(wEnd).toUpperCase()}</div>`+
@@ -3146,6 +3150,7 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
           `<div class="fit-stat"><div class="s-lbl">Total Calories</div><div class="s-val">${r(cal)}</div></div>`+
           `<div class="fit-stat"><div class="s-lbl">Total Protein</div><div class="s-val">${r(pro)}<small>g</small></div></div>`+
           `<div class="fit-stat"><div class="s-lbl">Total Fat</div><div class="s-val">${r(fat)}<small>g</small></div></div>`+
+          `<div class="fit-stat"><div class="s-lbl">Total Carbs</div><div class="s-val">${r(carb)}<small>g</small></div></div>`+
           `<div class="fit-stat"><div class="s-lbl">Calories Burned</div><div class="s-val">${r(burn)}</div></div>`+
           `<div class="fit-stat"><div class="s-lbl">Hours Fasted</div><div class="s-val">${r(fast)}<small>h</small></div></div>`+
           `<div class="fit-stat"><div class="s-lbl">Supplements C/P/F</div><div class="s-val" style="font-size:13px">${r(sC)} / ${r(sP)}g / ${r(sF)}g</div></div>`+
@@ -3166,13 +3171,13 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
     function mealSumBlock(label,key){
       const m=day.meals[key];const items=m.rows.filter(x=>x.food||x.cal||x.pro||x.fat);const s=mealSub(m);
       return `<div class="fit-sum-block"><div class="fit-sum-bhead"><span>${label}${m.name?' · '+esc(m.name):''}</span><span class="meta">${s.cal} CAL</span></div>`+
-        (items.length?`<table class="fit-sum-tbl"><thead><tr><th>Food</th><th>Cal</th><th>Protein</th><th>Fat</th></tr></thead><tbody>`+
-          items.map(x=>`<tr><td>${esc(x.food||'—')}</td><td>${num(x.cal)}</td><td>${num(x.pro)}g</td><td>${num(x.fat)}g</td></tr>`).join('')+
-          `<tr class="tot-row"><td>Subtotal</td><td>${s.cal}</td><td>${s.pro}g</td><td>${s.fat}g</td></tr></tbody></table>`:`<div class="fit-sum-empty">No items logged.</div>`)+`</div>`;
+        (items.length?`<table class="fit-sum-tbl"><thead><tr><th>Food</th><th>Cal</th><th>Protein</th><th>Fat</th><th>Carbs</th></tr></thead><tbody>`+
+          items.map(x=>`<tr><td>${esc(x.food||'—')}</td><td>${num(x.cal)}</td><td>${num(x.pro)}g</td><td>${num(x.fat)}g</td><td>${num(x.carb)}g</td></tr>`).join('')+
+          `<tr class="tot-row"><td>Subtotal</td><td>${s.cal}</td><td>${s.pro}g</td><td>${s.fat}g</td><td>${s.carb}g</td></tr></tbody></table>`:`<div class="fit-sum-empty">No items logged.</div>`)+`</div>`;
     }
     const supp=day.meals.supp;
     const suppBlock=`<div class="fit-sum-block"><div class="fit-sum-bhead"><span>Supplements${supp.name?' · '+esc(supp.name):''}</span><span class="meta">${num(supp.cal)} CAL</span></div>`+
-      `<div class="fit-sum-kv">CAL <b>${num(supp.cal)}</b> · PROTEIN <b>${num(supp.pro)}g</b> · FAT <b>${num(supp.fat)}g</b></div></div>`;
+      `<div class="fit-sum-kv">CAL <b>${num(supp.cal)}</b> · PROTEIN <b>${num(supp.pro)}g</b> · FAT <b>${num(supp.fat)}g</b> · CARBS <b>${num(supp.carb)}g</b></div></div>`;
     const water=`<div class="fit-sum-block"><div class="fit-sum-bhead"><span>Water Intake</span></div><div class="fit-sum-kv"><b>${day.meals.water?esc(day.meals.water):'—'}</b></div></div>`;
     return `<div class="fit-panel active">`+
       `<div class="fit-sum-head"><div class="fit-sum-title">DAILY SUMMARY<small>${dayName(curDate).toUpperCase()} · ${prettyD(curDate)} · ${curDate}</small></div>`+
@@ -3181,6 +3186,7 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
         `<div class="fit-stat"><div class="s-lbl">Caloric Intake</div><div class="s-val">${t.cal}</div></div>`+
         `<div class="fit-stat"><div class="s-lbl">Total Protein</div><div class="s-val">${t.pro}<small>g</small></div></div>`+
         `<div class="fit-stat"><div class="s-lbl">Total Fat</div><div class="s-val">${t.fat}<small>g</small></div></div>`+
+        `<div class="fit-stat"><div class="s-lbl">Total Carbs</div><div class="s-val">${t.carb}<small>g</small></div></div>`+
         `<div class="fit-stat"><div class="s-lbl">Hours Fasted</div><div class="s-val">${num(day.fasted)}<small>h</small></div></div>`+
         `<div class="fit-stat"><div class="s-lbl">Calories Burned</div><div class="s-val">${t.burned}</div></div>`+
       `</div>`+
@@ -3191,7 +3197,7 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
   function buildDayMd(date){
     const day=getDay(date);const t=dayTotals(day);
     let md=`---\ndate: ${date}\ntype: fitness-daily\ntags: [identity-pro, fitness, daily-summary]\n---\n\n# Fitness Daily Summary · ${date}\n\n`;
-    md+=`**Caloric Intake:** ${t.cal} kcal  \n**Total Protein:** ${t.pro} g  \n**Total Fat:** ${t.fat} g  \n**Hours Fasted:** ${num(day.fasted)} h  \n**Calories Burned:** ${t.burned} kcal  \n**Water Intake:** ${day.meals.water||'—'}\n\n`;
+    md+=`**Caloric Intake:** ${t.cal} kcal  \n**Total Protein:** ${t.pro} g  \n**Total Fat:** ${t.fat} g  \n**Total Carbs:** ${t.carb} g  \n**Hours Fasted:** ${num(day.fasted)} h  \n**Calories Burned:** ${t.burned} kcal  \n**Water Intake:** ${day.meals.water||'—'}\n\n`;
     md+=`## Workout\n\n`;
     const lifts=day.workout.map((x,i)=>Object.assign({n:i+1},x)).filter(x=>x.lift||x.weight||x.reps);
     if(lifts.length){md+=`| Lift | Weight | Time / Reps |\n|---|---|---|\n`+lifts.map(x=>`| ${x.lift||'—'} | ${x.weight||'—'} | ${x.reps||'—'} |`).join('\n')+`\n\n**Total Calories Burned:** ${t.burned} kcal\n\n`;}
@@ -3200,11 +3206,11 @@ window.FOLDERS_DOC = (function(){ try{ var bin=atob('PCFET0NUWVBFIGh0bWw+CjxodG1
     [['Meal 1','meal1'],['Meal 2','meal2'],['Meal 3','meal3'],['Snack','snack']].forEach(function(p){
       const lbl=p[0],key=p[1];const m=day.meals[key];const items=m.rows.filter(x=>x.food||x.cal||x.pro||x.fat);const s=mealSub(m);
       md+=`### ${lbl}${m.name?' — '+m.name:''}\n\n`;
-      if(items.length){md+=`| Food | Calories | Protein | Fat |\n|---|---|---|---|\n`+items.map(x=>`| ${x.food||'—'} | ${num(x.cal)} | ${num(x.pro)}g | ${num(x.fat)}g |`).join('\n')+`\n| **Subtotal** | **${s.cal}** | **${s.pro}g** | **${s.fat}g** |\n\n`;}
+      if(items.length){md+=`| Food | Calories | Protein | Fat | Carbs |\n|---|---|---|---|---|\n`+items.map(x=>`| ${x.food||'—'} | ${num(x.cal)} | ${num(x.pro)}g | ${num(x.fat)}g | ${num(x.carb)}g |`).join('\n')+`\n| **Subtotal** | **${s.cal}** | **${s.pro}g** | **${s.fat}g** | **${s.carb}g** |\n\n`;}
       else md+=`_No items logged._\n\n`;
     });
     const supp=day.meals.supp;
-    md+=`### Supplements${supp.name?' — '+supp.name:''}\n\nCalories: ${num(supp.cal)} · Protein: ${num(supp.pro)}g · Fat: ${num(supp.fat)}g\n\n`;
+    md+=`### Supplements${supp.name?' — '+supp.name:''}\n\nCalories: ${num(supp.cal)} · Protein: ${num(supp.pro)}g · Fat: ${num(supp.fat)}g · Carbs: ${num(supp.carb)}g\n\n`;
     md+=`### Water Intake\n\n${day.meals.water||'—'}\n\n`;
     md+=`---\n*Logged via Identity Protocol OS · Fitness.*\n`;
     return md;
