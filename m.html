@@ -215,6 +215,52 @@
   .fit-sumrow:last-child{border-bottom:none}
   .fit-sumrow .m{color:var(--text-dim);font-size:10px}
   .fit-sumempty{padding:9px 11px;font-style:italic;color:var(--text-dim);font-size:11px}
+
+  /* ===== TO DO LIST launcher (TODAY) ===== */
+  .todo-launch{display:flex;align-items:center;gap:11px;width:100%;border:1px solid var(--amber);background:linear-gradient(180deg,rgba(255,167,51,.08),rgba(255,167,51,.02));color:var(--amber);padding:13px 14px;margin-bottom:11px;border-radius:2px;font-family:"Share Tech Mono";font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;text-align:left}
+  .todo-launch:active{transform:scale(.99);background:rgba(255,167,51,.14)}
+  .todo-launch .tl-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 9px var(--amber);animation:blink 2s ease-in-out infinite;flex:0 0 auto}
+  .todo-launch .tl-label{flex:1}
+  .todo-launch .tl-count{font-family:"Orbitron";font-weight:900;font-size:13px;color:var(--cy-0);background:rgba(0,224,255,.08);border:1px solid var(--line);padding:2px 10px;letter-spacing:.04em;text-shadow:0 0 6px rgba(0,224,255,.4)}
+  .todo-launch .tl-go{font-size:14px;color:var(--amber-2)}
+
+  /* ===== TO DO LIST full-screen ===== */
+  .todo-screen{position:fixed;inset:0;z-index:120;display:none;flex-direction:column;background:linear-gradient(180deg,rgba(6,20,36,.99),rgba(4,17,31,.995))}
+  .todo-screen.open{display:flex;animation:fade .2s ease}
+  .ts-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(env(safe-area-inset-top) + 12px) 14px 12px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,rgba(0,196,255,.08),transparent)}
+  .ts-ttl{font-family:"Orbitron";font-weight:900;font-size:15px;letter-spacing:.14em;color:#fff;text-shadow:0 0 14px rgba(0,224,255,.5);display:flex;align-items:center;gap:9px}
+  .ts-ttl .b{color:var(--amber);font-size:11px;letter-spacing:.2em}
+  .ts-exit{background:transparent;border:1px solid var(--amber);color:var(--amber);padding:9px 14px;font-family:"Share Tech Mono";font-size:11px;letter-spacing:.18em;border-radius:4px;flex:0 0 auto}
+  .ts-exit:active{background:rgba(255,167,51,.14)}
+  .ts-meta{font-family:"Share Tech Mono";font-size:9px;letter-spacing:.2em;color:var(--cy-1);padding:8px 14px 0}
+  .ts-tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 14px;border-bottom:1px solid var(--line-dim);-webkit-overflow-scrolling:touch}
+  .ts-tabs::-webkit-scrollbar{display:none}
+  .ts-tab{flex:0 0 auto;display:flex;align-items:center;gap:7px;padding:8px 12px;border:1px solid var(--line-dim);background:rgba(8,26,46,.55);color:var(--text-dim);font-family:"Share Tech Mono";font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;border-radius:5px}
+  .ts-tab.on{color:var(--amber);border-color:var(--amber);background:rgba(255,167,51,.08)}
+  .ts-tab.on.done-tab{color:var(--green);border-color:var(--green);background:rgba(92,255,177,.07)}
+  .ts-tab .p{font-family:"Orbitron";font-weight:700;font-size:9px;color:var(--cy-0);background:rgba(0,224,255,.08);border:1px solid var(--line-dim);padding:1px 6px;border-radius:3px}
+  .ts-tab.on .p{color:var(--amber);border-color:rgba(255,167,51,.4)}
+  .ts-tab.on.done-tab .p{color:var(--green);border-color:rgba(92,255,177,.4)}
+  .ts-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(env(safe-area-inset-bottom) + 24px)}
+  .ts-intro{font-family:"Share Tech Mono";font-size:10.5px;color:var(--cy-1);font-style:italic;line-height:1.55;border-left:2px solid var(--amber);padding:4px 0 4px 11px;margin-bottom:12px}
+  .ts-intro b{display:block;color:var(--amber);font-style:normal;font-size:9px;letter-spacing:.18em;margin-bottom:4px}
+  .ts-add{display:flex;gap:8px;margin-bottom:12px}
+  .ts-add input{flex:1}
+  .ts-add button{background:transparent;border:1px solid var(--amber);color:var(--amber);padding:11px 14px;font-family:"Share Tech Mono";font-size:10px;letter-spacing:.16em;text-transform:uppercase;border-radius:6px;flex:0 0 auto}
+  .ts-item{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid var(--line-dim);background:rgba(0,20,40,.55);border-radius:6px;margin-bottom:8px}
+  .ts-item .tb{width:20px;height:20px;border:1.5px solid var(--cy-1);border-radius:4px;position:relative;flex:0 0 auto}
+  .ts-item.done .tb{background:var(--cy-0);border-color:var(--cy-0);box-shadow:0 0 9px var(--cy-0)}
+  .ts-item.done .tb::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #04111f;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+  .ts-item .tt{flex:1;font-size:13px;color:var(--text);font-family:"JetBrains Mono",monospace;line-height:1.4}
+  .ts-item.done .tt{color:var(--cy-2);text-decoration:line-through;text-decoration-color:var(--cy-dim)}
+  .ts-item .tw{font-family:"Share Tech Mono";font-size:8.5px;letter-spacing:.12em;color:var(--text-dim);flex:0 0 auto}
+  .ts-item .ts-area-badge{font-family:"Share Tech Mono";font-size:8px;letter-spacing:.16em;color:var(--amber);border:1px solid rgba(255,167,51,.32);background:rgba(255,167,51,.06);padding:3px 7px;border-radius:3px;flex:0 0 auto;text-transform:uppercase}
+  .ts-item .tx{background:transparent;border:1px solid var(--line-dim);color:var(--text-dim);width:30px;height:30px;font-size:16px;line-height:1;border-radius:5px;flex:0 0 auto;padding:0}
+  .ts-item .tx:active{border-color:var(--red);color:var(--red)}
+  .ts-empty{font-family:"Share Tech Mono";font-size:10px;letter-spacing:.16em;color:var(--text-dim);text-align:center;padding:34px 16px;border:1px dashed var(--line-dim);border-radius:6px;text-transform:uppercase;line-height:1.6}
+  .ts-empty span{display:block;color:var(--cy-2);font-size:9.5px;margin-top:8px;letter-spacing:.04em;text-transform:none;font-style:italic}
+  .ts-clear{margin-top:8px;background:transparent;border:1px solid var(--line-dim);color:var(--text-dim);padding:10px;font-family:"Share Tech Mono";font-size:10px;letter-spacing:.18em;border-radius:6px;width:100%;text-transform:uppercase}
+  .ts-clear:active{border-color:var(--red);color:var(--red)}
 </style>
 </head>
 <body>
@@ -268,6 +314,9 @@
 
     <!-- phase 1 identity -->
     <div class="id-card"><span class="label">PHASE 1 IDENTITY</span>I am a consistently funded trader. My edge is proven. I follow my rules without negotiation.</div>
+
+    <!-- to do list launcher -->
+    <button class="todo-launch" id="todoLaunch"><span class="tl-dot"></span><span class="tl-label">To Do List</span><span class="tl-count" id="todoLaunchCount">0</span><span class="tl-go">▸</span></button>
 
     <!-- real bank account -->
     <div class="bank-section">
@@ -353,6 +402,17 @@
 <div class="back-hint">◎ double-tap empty space below to return home</div>
 </div><!-- /appWrap -->
 
+<!-- TO DO LIST · full screen -->
+<div class="todo-screen" id="todoScreen">
+  <div class="ts-head">
+    <div class="ts-ttl"><span class="b">TASKS //</span><span>TO DO</span></div>
+    <button class="ts-exit" id="todoExit">EXIT ✕</button>
+  </div>
+  <div class="ts-meta" id="todoMeta">0 OPEN · 0 COMPLETE</div>
+  <div class="ts-tabs" id="todoTabsM"></div>
+  <div class="ts-body" id="todoBodyM"></div>
+</div>
+
 <script>
 // ============ shared data layer (same keys as desktop) ============
 const MAIN='identity-pro-os-v1', TRACK='idpro-tracking', NOTES='coherenceNotes_v1';
@@ -399,6 +459,8 @@ function renderToday(){
     const id=el.dataset.h; st.habits[tk][id]=!st.habits[tk][id]; saveMain(st); renderToday();
   });
   renderBank();
+  if(typeof updateTodoLaunchCount==='function') updateTodoLaunchCount();
+  if(typeof todoScreenOpen==='function' && todoScreenOpen()) renderTodo();
 }
 function wireToday(){
   $('habitDropHead').onclick=()=>$('habitDrop').classList.toggle('open');
@@ -747,14 +809,114 @@ let lastTap=0;
 function isOpenArea(t){ return !t.closest('button,a,input,textarea,select,.stepper,.hbit,.note,nav.tabbar,.drop-head,.bank-actions,.bank-btn,#syncMount'); }
 document.addEventListener('pointerup', e=>{
   if(!document.body.classList.contains('inapp')) return;
+  if(typeof todoScreenOpen==='function' && todoScreenOpen()){ lastTap=0; return; }   // never bounce home from inside the to-do screen
   if(e.clientY < window.innerHeight*0.65){ lastTap=0; return; }   // only the bottom third of the screen
   if(!isOpenArea(e.target)){ lastTap=0; return; }
   const now=Date.now();
   if(now-lastTap<350){ goHome(); lastTap=0; } else lastTap=now;
 });
 
+// ============ TO DO LIST (full-screen · synced via state.todos, same key as desktop) ============
+const TODO_AREAS=[
+  {id:'TRADE',   tag:'TR', name:'TRADING',  sub:'Edge in motion.',          intro:'Setups to study, evals to pass, journal cleanups, broker tasks — anything that keeps the trading edge sharp and the protocol locked.'},
+  {id:'IDENTITY',tag:'ID', name:'IDENTITY', sub:'The recoding layer.',      intro:'Beliefs to rewrite, scripts to record, visualization sessions, shadow work — the inner moves that install the new self-concept.'},
+  {id:'CLAUDE',  tag:'AI', name:'CLAUDE',   sub:'Build with the assistant.',intro:'Prompts to refine, dashboards to extend, automations to build, research to delegate. The leverage layer for everything else.'},
+  {id:'FINANCE', tag:'$$', name:'FINANCES', sub:'Capital, accounts, flows.',intro:'Accounts to open, statements to review, transfers, taxes, payouts — the plumbing under the streams.'},
+  {id:'HOME',    tag:'HM', name:'HOME',     sub:'Environment is identity.', intro:'Cleaning, fixing, upgrading, organizing — the broadcast environment that holds the version of you living the result.'},
+  {id:'FAMILY',  tag:'FAM',name:'FAMILY',   sub:'Relationships compound.',  intro:'Calls, plans, gifts, follow-ups, presence — the relational layer the lifestyle exists to serve.'},
+  {id:'DIGITAL', tag:'DB', name:'DIGITAL',  sub:'The third stream.',        intro:'Concept work, outlines, audience building, sales pages, launches — the daily input that crystallizes Phase 3.'},
+  {id:'TRAVEL',  tag:'TVL',name:'TRAVEL',   sub:'First class is default.',  intro:'Flights to book, trips to plan, lounges, hotels, Scottsdale scouting — the lifestyle in motion. Travel is identity, not reward.'}
+];
+let todoActiveTab='TRADE';
+function todoFmtDate(ts){ if(!ts)return''; const d=new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'2-digit'}).toUpperCase(); }
+function updateTodoLaunchCount(){ const s=loadMain(); const n=(s.todos||[]).filter(t=>!t.done).length; const el=$('todoLaunchCount'); if(el)el.textContent=n; }
+function renderTodoTabs(){
+  const wrap=$('todoTabsM'); if(!wrap)return;
+  const s=loadMain(); const todos=s.todos||[]; wrap.innerHTML='';
+  TODO_AREAS.forEach(a=>{
+    const c=todos.filter(t=>t.area===a.id&&!t.done).length;
+    const tab=document.createElement('div');
+    tab.className='ts-tab'+(todoActiveTab===a.id?' on':'');
+    tab.innerHTML='<span>'+esc(a.name)+'</span><span class="p">'+c+'</span>';
+    tab.onclick=()=>{ todoActiveTab=a.id; renderTodo(); };
+    wrap.appendChild(tab);
+  });
+  const dc=todos.filter(t=>t.done).length;
+  const ct=document.createElement('div');
+  ct.className='ts-tab done-tab'+(todoActiveTab==='DONE'?' on':'');
+  ct.innerHTML='<span>✓ DONE</span><span class="p">'+dc+'</span>';
+  ct.onclick=()=>{ todoActiveTab='DONE'; renderTodo(); };
+  wrap.appendChild(ct);
+}
+function todoItemEl(t,isDone){
+  const el=document.createElement('div'); el.className='ts-item'+(t.done?' done':'');
+  const a=TODO_AREAS.find(x=>x.id===t.area);
+  el.innerHTML='<div class="tb" data-act="toggle"></div><div class="tt" data-act="toggle">'+esc(t.text)+'</div>'
+    +(isDone?'<span class="ts-area-badge">'+(a?a.tag:t.area)+'</span><span class="tw">'+todoFmtDate(t.completedAt)+'</span>':'<span class="tw">'+todoFmtDate(t.createdAt)+'</span>')
+    +'<button class="tx" data-act="del" aria-label="Delete">×</button>';
+  el.addEventListener('click',e=>{
+    const node=e.target.closest('[data-act]'); if(!node)return;
+    const action=node.dataset.act;
+    if(action==='toggle') toggleTodoM(t.id);
+    else if(action==='del') deleteTodoM(t.id);
+  });
+  return el;
+}
+function renderTodoBody(){
+  const body=$('todoBodyM'); if(!body)return; body.innerHTML='';
+  const s=loadMain(); const todos=s.todos||[];
+  if(todoActiveTab==='DONE'){
+    body.innerHTML='<div class="ts-intro"><b>COMPLETED · ALL AREAS</b>The receipt of execution. Each item here is identity proven through action.</div>';
+    const done=todos.filter(t=>t.done).sort((a,b)=>(b.completedAt||0)-(a.completedAt||0));
+    if(!done.length){ body.innerHTML+='<div class="ts-empty">NO COMPLETED TASKS YET<span>Check off an item from any area to file it here.</span></div>'; return; }
+    const list=document.createElement('div'); done.forEach(t=>list.appendChild(todoItemEl(t,true))); body.appendChild(list);
+    const clr=document.createElement('button'); clr.className='ts-clear'; clr.textContent='▸ CLEAR ALL COMPLETED';
+    clr.onclick=()=>{ if(!confirm('Clear all completed tasks? This cannot be undone.'))return; const st=loadMain(); st.todos=(st.todos||[]).filter(t=>!t.done); saveMain(st); renderTodo(); };
+    body.appendChild(clr); return;
+  }
+  const area=TODO_AREAS.find(a=>a.id===todoActiveTab);
+  body.innerHTML='<div class="ts-intro"><b>'+area.tag+' · '+area.name+' — '+esc(area.sub)+'</b>'+esc(area.intro)+'</div>'
+    +'<div class="ts-add"><input type="text" id="todoNewM" placeholder="Add a task to '+esc(area.name)+'…"><button id="todoAddM">▸ ADD</button></div>';
+  const open=todos.filter(t=>t.area===todoActiveTab&&!t.done).sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
+  if(!open.length){ body.innerHTML+='<div class="ts-empty">NO OPEN TASKS IN '+esc(area.name)+'<span>The version of you that already has this would still take aligned action. Add one above.</span></div>'; }
+  else { const list=document.createElement('div'); open.forEach(t=>list.appendChild(todoItemEl(t,false))); body.appendChild(list); }
+  const inp=$('todoNewM'), add=$('todoAddM');
+  if(add) add.onclick=()=>addTodoM(inp);
+  if(inp) inp.onkeydown=e=>{ if(e.key==='Enter') addTodoM(inp); };
+}
+function addTodoM(inp){
+  const v=(inp&&inp.value||'').trim(); if(!v)return;
+  const s=loadMain(); s.todos=s.todos||[];
+  s.todos.push({id:'t'+Date.now()+'_'+Math.random().toString(36).slice(2,7),text:v,area:todoActiveTab,done:false,createdAt:Date.now(),completedAt:null});
+  saveMain(s); if(inp)inp.value=''; renderTodo(); setTimeout(()=>{ const n=$('todoNewM'); if(n)n.focus(); },0);
+}
+function toggleTodoM(id){
+  const s=loadMain(); s.todos=s.todos||[]; const t=s.todos.find(x=>x.id===id); if(!t)return;
+  t.done=!t.done; t.completedAt=t.done?Date.now():null; saveMain(s); renderTodo();
+}
+function deleteTodoM(id){
+  if(!confirm('Delete this task?'))return;
+  const s=loadMain(); s.todos=(s.todos||[]).filter(x=>x.id!==id); saveMain(s); renderTodo();
+}
+function renderTodo(){
+  renderTodoTabs(); renderTodoBody();
+  const s=loadMain(); const todos=s.todos||[];
+  const open=todos.filter(t=>!t.done).length, done=todos.filter(t=>t.done).length;
+  const m=$('todoMeta'); if(m)m.textContent=open+' OPEN · '+done+' COMPLETE';
+  updateTodoLaunchCount();
+}
+function openTodoScreen(){ todoActiveTab='TRADE'; renderTodo(); $('todoScreen').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeTodoScreen(){ $('todoScreen').classList.remove('open'); document.body.style.overflow=''; updateTodoLaunchCount(); }
+function todoScreenOpen(){ const sc=$('todoScreen'); return !!(sc&&sc.classList.contains('open')); }
+function wireTodoM(){
+  const b=$('todoLaunch'); if(b)b.onclick=openTodoScreen;
+  const x=$('todoExit'); if(x)x.onclick=closeTodoScreen;
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&todoScreenOpen())closeTodoScreen(); });
+  updateTodoLaunchCount();
+}
+
 // init — start on the hub/home screen
-wireToday(); wireBank(); wireProto(); wireNotes(); wireFocus(); wireVortex(); wireFitness();
+wireToday(); wireBank(); wireProto(); wireNotes(); wireFocus(); wireVortex(); wireFitness(); wireTodoM();
 renderHome();
 </script>
 
