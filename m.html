@@ -223,6 +223,27 @@
   .todo-launch .tl-label{flex:1}
   .todo-launch .tl-count{font-family:"Orbitron";font-weight:900;font-size:13px;color:var(--cy-0);background:rgba(0,224,255,.08);border:1px solid var(--line);padding:2px 10px;letter-spacing:.04em;text-shadow:0 0 6px rgba(0,224,255,.4)}
   .todo-launch .tl-go{font-size:14px;color:var(--amber-2)}
+  /* ===== 9 declarations launcher + screen ===== */
+  .decl-launch{display:flex;align-items:center;gap:11px;width:100%;border:1px solid #b69cff;background:linear-gradient(180deg,rgba(182,156,255,.1),rgba(182,156,255,.02));color:#cdbcff;padding:13px 14px;margin-bottom:11px;border-radius:2px;font-family:"Share Tech Mono";font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;text-align:left}
+  .decl-launch:active{transform:scale(.99);background:rgba(182,156,255,.16)}
+  .decl-launch .dl-dot{width:7px;height:7px;border-radius:50%;background:#b69cff;box-shadow:0 0 9px #b69cff;animation:blink 2s ease-in-out infinite;flex:0 0 auto}
+  .decl-launch .dl-label{flex:1}
+  .decl-launch .dl-count{font-family:"Orbitron";font-weight:900;font-size:13px;color:#b69cff;background:rgba(182,156,255,.1);border:1px solid rgba(182,156,255,.3);padding:2px 10px;letter-spacing:.04em;text-shadow:0 0 6px rgba(182,156,255,.4)}
+  .decl-launch .dl-go{font-size:14px;color:#cdbcff}
+  .decl-screen{position:fixed;inset:0;z-index:120;display:none;flex-direction:column;background:linear-gradient(180deg,rgba(22,15,46,.99),rgba(10,8,31,.995))}
+  .decl-screen.open{display:flex;animation:fade .2s ease}
+  .ds-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(env(safe-area-inset-top) + 12px) 14px 12px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,rgba(182,156,255,.1),transparent)}
+  .ds-ttl{font-family:"Orbitron";font-weight:900;font-size:15px;letter-spacing:.14em;color:#fff;text-shadow:0 0 14px rgba(182,156,255,.5);display:flex;align-items:center;gap:9px}
+  .ds-ttl .b{color:#b69cff;font-size:11px;letter-spacing:.2em}
+  .ds-exit{background:transparent;border:1px solid #b69cff;color:#cdbcff;padding:9px 14px;font-family:"Share Tech Mono";font-size:11px;letter-spacing:.18em;border-radius:4px;flex:0 0 auto}
+  .ds-exit:active{background:rgba(182,156,255,.16)}
+  .ds-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(env(safe-area-inset-bottom) + 24px)}
+  .ds-intro{font-family:"Share Tech Mono";font-size:10.5px;color:#cdbcff;font-style:italic;line-height:1.55;border-left:2px solid #b69cff;padding:4px 0 4px 11px;margin-bottom:14px}
+  .ds-item{display:flex;gap:13px;padding:14px;border:1px solid var(--line-dim);background:rgba(30,20,55,.5);border-radius:6px;margin-bottom:9px}
+  .ds-num{font-family:"Orbitron";font-weight:900;font-size:18px;color:#b69cff;text-shadow:0 0 10px rgba(182,156,255,.5);flex:0 0 auto;width:24px;text-align:center;line-height:1.2}
+  .ds-tw{flex:1}
+  .ds-law{font-family:"Share Tech Mono";font-size:8.5px;letter-spacing:.2em;color:#b69cff;text-transform:uppercase;margin-bottom:5px;display:block}
+  .ds-statement{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--text);line-height:1.5}
 
   /* ===== TO DO LIST full-screen ===== */
   .todo-screen{position:fixed;inset:0;z-index:120;display:none;flex-direction:column;background:linear-gradient(180deg,rgba(6,20,36,.99),rgba(4,17,31,.995))}
@@ -312,8 +333,8 @@
       <div class="drop-body" id="habitList"></div>
     </div>
 
-    <!-- phase 1 identity -->
-    <div class="id-card"><span class="label">PHASE 1 IDENTITY</span>I am a consistently funded trader. My edge is proven. I follow my rules without negotiation.</div>
+    <!-- 9 declarations launcher -->
+    <button class="decl-launch" id="declLaunch"><span class="dl-dot"></span><span class="dl-label">9 Declarations</span><span class="dl-count">9</span><span class="dl-go">▸</span></button>
 
     <!-- to do list launcher -->
     <button class="todo-launch" id="todoLaunch"><span class="tl-dot"></span><span class="tl-label">To Do List</span><span class="tl-count" id="todoLaunchCount">0</span><span class="tl-go">▸</span></button>
@@ -411,6 +432,25 @@
   <div class="ts-meta" id="todoMeta">0 OPEN · 0 COMPLETE</div>
   <div class="ts-tabs" id="todoTabsM"></div>
   <div class="ts-body" id="todoBodyM"></div>
+</div>
+
+<div class="decl-screen" id="declScreen">
+  <div class="ds-head">
+    <div class="ds-ttl"><span class="b">COMPOUNDING //</span><span>9 DECLARATIONS</span></div>
+    <button class="ds-exit" id="declExit">EXIT ✕</button>
+  </div>
+  <div class="ds-body">
+    <div class="ds-intro">Spoken from the self that already has it all. Everything is done.</div>
+    <div class="ds-item"><div class="ds-num">1</div><div class="ds-tw"><span class="ds-law">Love</span><div class="ds-statement">I am source energy, an eternal being, made in; infinite love, infinite power, infinite intelligence and infinite supply.</div></div></div>
+    <div class="ds-item"><div class="ds-num">2</div><div class="ds-tw"><span class="ds-law">Celebration</span><div class="ds-statement">I celebrate every win, small or big all day long — every desirable feeling, action, and outcome — and that celebration builds consistent, unstoppable momentum that carries forward.</div></div></div>
+    <div class="ds-item"><div class="ds-num">3</div><div class="ds-tw"><span class="ds-law">Self Forgiveness</span><div class="ds-statement">I practice rapid forgiveness to self and others completely; I release every judgment of my past and stand clean, free, and whole in this present moment.</div></div></div>
+    <div class="ds-item"><div class="ds-num">4</div><div class="ds-tw"><span class="ds-law">Flow</span><div class="ds-statement">Everything I do rises from rhythm and flow; I never force, I never overreach — I am focused only on the next step, this is the way.</div></div></div>
+    <div class="ds-item"><div class="ds-num">5</div><div class="ds-tw"><span class="ds-law">The Works</span><div class="ds-statement">Everything is always working out for me — I move through neutral moments and charge them positively toward my end desires.</div></div></div>
+    <div class="ds-item"><div class="ds-num">6</div><div class="ds-tw"><span class="ds-law">Order</span><div class="ds-statement">I sit relaxed and open and ask, “What is my highest order of business?” — I step into my highest potential first; doing comes from being, and from that state my order arranges itself perfectly.</div></div></div>
+    <div class="ds-item"><div class="ds-num">7</div><div class="ds-tw"><span class="ds-law">Money</span><div class="ds-statement">There is an unconscious knowing that money is here and will always be here, in all amounts.</div></div></div>
+    <div class="ds-item"><div class="ds-num">8</div><div class="ds-tw"><span class="ds-law">Coherent Trading</span><div class="ds-statement">I trade from a centered, whole state — detached, abundant, indifferent to any profit or loss — and from that neutrality I follow my protocols, build momentum, and build accounts.</div></div></div>
+    <div class="ds-item"><div class="ds-num">9</div><div class="ds-tw"><span class="ds-law">The Seal</span><div class="ds-statement">I know the frequency of my identity intimately; I savor it in the vortex, then consciously move it to the background, where it's sealed, permanently running my operation automatically.</div></div></div>
+  </div>
 </div>
 
 <script>
@@ -994,6 +1034,18 @@ renderHome();
   function subscribe(){if(channel)return;channel=sb.channel('app_state_'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'app_state',filter:'user_id=eq.'+user.id},p=>{const d=p.new&&p.new.data;if(!d||dirty)return;const a=document.activeElement;if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName))return;if(applyBundle(d)&&window.__softRefresh)window.__softRefresh();}).subscribe();}
   sb.auth.onAuthStateChange((_e,session)=>{user=session?session.user:null;if(user){subscribe();pull();}else{if(channel){sb.removeChannel(channel);channel=null;}signedOut();}});
   sb.auth.getSession().then(({data})=>{if(!data.session&&!user)signedOut();});
+})();
+</script>
+<script>
+(function(){
+  var sc=document.getElementById('declScreen');
+  var openB=document.getElementById('declLaunch');
+  var exitB=document.getElementById('declExit');
+  function open(){ if(sc){ sc.classList.add('open'); document.body.style.overflow='hidden'; } }
+  function close(){ if(sc){ sc.classList.remove('open'); document.body.style.overflow=''; } }
+  if(openB)openB.addEventListener('click',open);
+  if(exitB)exitB.addEventListener('click',close);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&sc&&sc.classList.contains('open'))close(); });
 })();
 </script>
 </body>
