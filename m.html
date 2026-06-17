@@ -239,6 +239,10 @@
   .ds-exit:active{background:rgba(182,156,255,.16)}
   .ds-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(env(safe-area-inset-bottom) + 24px)}
   .ds-intro{font-family:"Share Tech Mono";font-size:10.5px;color:#cdbcff;font-style:italic;line-height:1.55;border-left:2px solid #b69cff;padding:4px 0 4px 11px;margin-bottom:14px}
+  .ds-features{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+  .ds-feature{padding:15px 16px;border:1px solid #d9c9ff;background:linear-gradient(180deg,rgba(182,156,255,.2),rgba(182,156,255,.05));box-shadow:0 0 20px rgba(182,156,255,.22);text-align:center;border-radius:6px}
+  .ds-feature .ff-tag{font-family:"Share Tech Mono";font-size:8px;letter-spacing:.26em;color:#b69cff;text-transform:uppercase;display:block;margin-bottom:7px}
+  .ds-feature .ff-text{font-family:"Orbitron";font-weight:700;font-size:14px;color:#fff;text-shadow:0 0 14px rgba(182,156,255,.5);line-height:1.45}
   .ds-item{display:flex;gap:13px;padding:14px;border:1px solid var(--line-dim);background:rgba(30,20,55,.5);border-radius:6px;margin-bottom:9px}
   .ds-num{font-family:"Orbitron";font-weight:900;font-size:18px;color:#b69cff;text-shadow:0 0 10px rgba(182,156,255,.5);flex:0 0 auto;width:24px;text-align:center;line-height:1.2}
   .ds-tw{flex:1}
@@ -440,9 +444,13 @@
     <button class="ds-exit" id="declExit">EXIT ✕</button>
   </div>
   <div class="ds-body">
+    <div class="ds-features">
+      <div class="ds-feature"><span class="ff-tag">◆ Anchor</span><div class="ff-text">What is my highest order of business?</div></div>
+      <div class="ds-feature"><span class="ff-tag">◆ Anchor</span><div class="ff-text">My mind is indefatigable, undefeated in all realms of possibility. Eternally invincible, no matter the circumstance.</div></div>
+    </div>
     <div class="ds-intro">Spoken from the self that already has it all. Everything is done.</div>
     <div class="ds-item"><div class="ds-num">1</div><div class="ds-tw"><span class="ds-law">Love</span><div class="ds-statement">I am source energy, an eternal being, made in; infinite love, infinite power, infinite intelligence and infinite supply.</div></div></div>
-    <div class="ds-item"><div class="ds-num">2</div><div class="ds-tw"><span class="ds-law">The Unknown</span><div class="ds-statement">I am home, in the unknown; the unknown is my happy place, where I know I belong if I wish to continue to evolve and expand.</div></div></div>
+    <div class="ds-item"><div class="ds-num">2</div><div class="ds-tw"><span class="ds-law">The Unknown</span><div class="ds-statement">I surrender to the unknown, the sweet spot for great evolution and expansion.</div></div></div>
     <div class="ds-item"><div class="ds-num">3</div><div class="ds-tw"><span class="ds-law">Celebration</span><div class="ds-statement">I celebrate every win, small or big all day long — every desirable feeling, action, and outcome — and that celebration builds consistent, unstoppable momentum that carries forward.</div></div></div>
     <div class="ds-item"><div class="ds-num">4</div><div class="ds-tw"><span class="ds-law">Self Forgiveness</span><div class="ds-statement">I practice rapid forgiveness to self and others completely; I release every judgment of my past and stand clean, free, and whole in this present moment.</div></div></div>
     <div class="ds-item"><div class="ds-num">5</div><div class="ds-tw"><span class="ds-law">Flow</span><div class="ds-statement">Everything I do rises from rhythm and flow; I never force, I never overreach — I am focused only on the next step, this is the way.</div></div></div>
